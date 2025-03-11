@@ -1,0 +1,64 @@
+footy-tracker/
+│   .dockerignore
+│   .env.local
+│   .gitignore
+│   docker-compose.yml
+│   Dockerfile
+│   next-env.d.ts
+│   next.config.mjs
+│   package-lock.json
+│   package.json
+│   postcss.config.mjs
+│   README.md
+│   tailwind.config.ts
+│   tsconfig.json
+│
+├───.next/
+│   ├───cache/
+│   ├───server/
+│   ├───static/
+│   ├───types/
+│
+├───app/
+│   ├───actions/
+│   │   ├───fitbit.js  <-- Handles Fitbit API logic
+│   │
+│   ├───api/
+│   │   ├───fitbit/
+│   │   │   ├───callback/
+│   │   │   │   ├───route.js  <-- Fitbit OAuth callback handler
+│   │
+│   ├───dashboard/
+│   │   ├───page.tsx  <-- Main dashboard page
+│   │
+│   ├───login/
+│   │   ├───page.tsx
+│
+├───components/
+│   ├───activity-display.tsx  <-- Displays user activity data
+│   ├───dashboard/
+│   │   ├───dashboard-header.tsx  <-- Navigation bar for dashboard
+│   │   ├───performance-overview.tsx  <-- Performance charts
+│   │   ├───recent-activities.tsx  <-- List of past activities
+│   │   ├───training-metrics.tsx  <-- Training summary
+│   │   ├───upcoming-goals.tsx  <-- Goal tracking
+│   │
+│   ├───ui/
+│   │   ├───button.tsx
+│   │   ├───card.tsx
+│   │   ├───dropdown-menu.tsx
+│   │   ├───motion.tsx  <-- Motion components (NEW: Framer Motion animations)
+│
+├───hooks/
+│   ├───use-mobile.tsx
+│   ├───use-toast.ts
+│
+├───lib/
+│   ├───utils.ts
+│
+├───public/
+│   ├───placeholder-logo.png
+│   ├───placeholder-user.jpg
+│
+├───styles/
+│   ├───globals.css  <-- Global styles (colors, fonts, spacing)

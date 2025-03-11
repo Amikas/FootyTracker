@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 // Sample data - in a real app, this would come from your API
 const weeklyData = [
@@ -13,14 +13,7 @@ const weeklyData = [
   { day: "Fri", distance: 0, speed: 0, heartRate: 0 },
   { day: "Sat", distance: 8.2, speed: 15, heartRate: 162 },
   { day: "Sun", distance: 3.1, speed: 10, heartRate: 130 },
-]
-
-const monthlyData = [
-  { week: "Week 1", distance: 24.5, speed: 12.5, heartRate: 145 },
-  { week: "Week 2", distance: 28.3, speed: 13.2, heartRate: 148 },
-  { week: "Week 3", distance: 22.1, speed: 11.8, heartRate: 142 },
-  { week: "Week 4", distance: 30.5, speed: 14.0, heartRate: 152 },
-]
+];
 
 export default function PerformanceOverview() {
   return (
@@ -45,14 +38,7 @@ export default function PerformanceOverview() {
                   <XAxis dataKey="day" />
                   <YAxis unit="km" />
                   <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="distance"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
-                  />
+                  <Line type="monotone" dataKey="distance" stroke="#facc15" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -66,14 +52,7 @@ export default function PerformanceOverview() {
                   <XAxis dataKey="day" />
                   <YAxis unit="km/h" />
                   <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="speed"
-                    stroke="#10b981"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
-                  />
+                  <Line type="monotone" dataKey="speed" stroke="#22c55e" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -87,14 +66,7 @@ export default function PerformanceOverview() {
                   <XAxis dataKey="day" />
                   <YAxis unit="bpm" />
                   <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="heartRate"
-                    stroke="#ef4444"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
-                  />
+                  <Line type="monotone" dataKey="heartRate" stroke="#dc2626" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -102,6 +74,5 @@ export default function PerformanceOverview() {
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }
-

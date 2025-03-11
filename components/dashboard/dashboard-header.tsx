@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { Bell, Menu, User } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Bell, Menu, User } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +11,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 export default function DashboardHeader() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-primary text-primary-foreground">
+    <header className="bg-gray-900 text-white">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -27,16 +27,16 @@ export default function DashboardHeader() {
           </div>
 
           <nav className="hidden md:flex space-x-4">
-            <Link href="/dashboard" className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10">
+            <Link href="/dashboard" className="px-3 py-2 rounded-md font-medium hover:bg-gray-800">
               Dashboard
             </Link>
-            <Link href="/training" className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10">
+            <Link href="/training" className="px-3 py-2 rounded-md font-medium hover:bg-gray-800">
               Training
             </Link>
-            <Link href="/stats" className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10">
+            <Link href="/stats" className="px-3 py-2 rounded-md font-medium hover:bg-gray-800">
               Stats
             </Link>
-            <Link href="/goals" className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10">
+            <Link href="/goals" className="px-3 py-2 rounded-md font-medium hover:bg-gray-800">
               Goals
             </Link>
           </nav>
@@ -72,43 +72,7 @@ export default function DashboardHeader() {
             </Button>
           </div>
         </div>
-
-        {isMobileMenuOpen && (
-          <div className="md:hidden py-2">
-            <div className="flex flex-col space-y-2 pb-3">
-              <Link
-                href="/dashboard"
-                className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/training"
-                className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Training
-              </Link>
-              <Link
-                href="/stats"
-                className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Stats
-              </Link>
-              <Link
-                href="/goals"
-                className="px-3 py-2 rounded-md font-medium hover:bg-primary-foreground/10"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Goals
-              </Link>
-            </div>
-          </div>
-        )}
       </div>
     </header>
-  )
+  );
 }
-
