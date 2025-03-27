@@ -1,31 +1,43 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
+
+interface TokenResponse {
+  access_token: string
+  refresh_token: string
+  expires_in: number
+  [key: string]: any
+}
+
+interface Result<T = undefined> {
+  success: boolean
+  data?: T
+  error?: string
+}
 
 // Generate auth URL for Fitbit OAuth
-export async function getFitbitAuthUrl() {
+export async function getFitbitAuthUrl(): Promise<string> {
   const clientId = process.env.FITBIT_CLIENT_ID
   const redirectUri = process.env.FITBIT_REDIRECT_URI
-  
+
   const scope = 'activity heartrate location profile'
   const responseType = 'code'
-  
-  const authUrl = `https://www.fitbit.com/oauth2/authorize?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${encodeURIComponent(redirectUri)}`
-  
+
+  const authUrl = `https://www.fitbit.com/oauth2/authorize?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${encodeURIComponent(redirectUri!)}`
   return authUrl
 }
 
 // Exchange auth code for access token
-export async function exchangeCodeForToken(code) {
+export async function exchangeCodeForToken(code: string): Promise<Result> {
   try {
     const clientId = process.env.FITBIT_CLIENT_ID
     const clientSecret = process.env.FITBIT_CLIENT_SECRET
     const redirectUri = process.env.FITBIT_REDIRECT_URI
-    
+
     const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
-    
-    const response = await axios({
+
+    const response: AxiosResponse<TokenResponse> = await axios({
       method: 'post',
       url: 'https://api.fitbit.com/oauth2/token',
       headers: {
@@ -35,13 +47,12 @@ export async function exchangeCodeForToken(code) {
       data: new URLSearchParams({
         code,
         grant_type: 'authorization_code',
-        redirect_uri: redirectUri
+        redirect_uri: redirectUri!
       }).toString()
     })
-    
-    // Store tokens in cookies (in production use a more secure method)
-    const cookieStore = cookies()
-    cookieStore.set('fitbit_access_token', response.data.access_token, { 
+
+    const cookieStore = await cookies()
+    cookieStore.set('fitbit_access_token', response.data.access_token, {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
       maxAge: response.data.expires_in
@@ -49,38 +60,34 @@ export async function exchangeCodeForToken(code) {
     cookieStore.set('fitbit_refresh_token', response.data.refresh_token, {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      maxAge: 60 * 60 * 24 * 30 // 30 days
+      maxAge: 60 * 60 * 24 * 30
     })
-    
+
     return { success: true }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error exchanging code for token:', error.response?.data || error.message)
-    return { 
-      success: false, 
+    return {
+      success: false,
       error: error.response?.data?.errors?.[0]?.message || 'Failed to authenticate with Fitbit'
     }
   }
 }
 
 // Get user activity data
-export async function getUserActivityData(date) {
+export async function getUserActivityData(date?: string): Promise<Result<any>> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const accessToken = cookieStore.get('fitbit_access_token')?.value
 
     if (!accessToken) {
       return { success: false, error: 'Not authenticated with Fitbit' }
     }
 
-    // If no date is provided, use today's date in YYYY-MM-DD format
-    if (!date) {
-      const today = new Date().toISOString().split('T')[0] // 'YYYY-MM-DD'
-      date = today
-    }
+    const targetDate = date || new Date().toISOString().split('T')[0]
 
     const response = await axios({
       method: 'get',
-      url: `https://api.fitbit.com/1/user/-/activities/date/${date}.json`,
+      url: `https://api.fitbit.com/1/user/-/activities/date/${targetDate}.json`,
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
@@ -90,12 +97,10 @@ export async function getUserActivityData(date) {
       success: true,
       data: response.data
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.response?.status === 401) {
-      // Token expired, try to refresh
       const refreshed = await refreshAccessToken()
       if (refreshed.success) {
-        // Try again with new token
         return getUserActivityData(date)
       }
     }
@@ -109,31 +114,28 @@ export async function getUserActivityData(date) {
 }
 
 // Function to disconnect Fitbit by removing stored tokens
-export async function disconnectFitbit() {
-  const cookieStore = cookies()
-
-  // Remove Fitbit authentication tokens
+export async function disconnectFitbit(): Promise<Result> {
+  const cookieStore = await cookies()
   cookieStore.delete('fitbit_access_token')
   cookieStore.delete('fitbit_refresh_token')
-
   return { success: true }
 }
 
 // Refresh access token
-async function refreshAccessToken() {
+async function refreshAccessToken(): Promise<Result> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const refreshToken = cookieStore.get('fitbit_refresh_token')?.value
-    
+
     if (!refreshToken) {
       return { success: false, error: 'No refresh token available' }
     }
-    
+
     const clientId = process.env.FITBIT_CLIENT_ID
     const clientSecret = process.env.FITBIT_CLIENT_SECRET
     const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
-    
-    const response = await axios({
+
+    const response: AxiosResponse<TokenResponse> = await axios({
       method: 'post',
       url: 'https://api.fitbit.com/oauth2/token',
       headers: {
@@ -145,27 +147,26 @@ async function refreshAccessToken() {
         refresh_token: refreshToken
       }).toString()
     })
-    
-    // Update tokens in cookies
-    cookieStore.set('fitbit_access_token', response.data.access_token, { 
+
+    cookieStore.set('fitbit_access_token', response.data.access_token, {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
       maxAge: response.data.expires_in
     })
-    
+
     if (response.data.refresh_token) {
       cookieStore.set('fitbit_refresh_token', response.data.refresh_token, {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 60 * 60 * 24 * 30 // 30 days
+        maxAge: 60 * 60 * 24 * 30
       })
     }
-    
+
     return { success: true }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error refreshing token:', error.response?.data || error.message)
-    return { 
-      success: false, 
+    return {
+      success: false,
       error: error.response?.data?.errors?.[0]?.message || 'Failed to refresh token'
     }
   }

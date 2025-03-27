@@ -20,7 +20,7 @@ export async function GET(request) {
   
   if (result.success) {
     // Redirect to dashboard or success page
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.redirect(new URL('/', request.url))
   } else {
     // Redirect to error page with error message
     return NextResponse.redirect(new URL(`/auth/error?error=${encodeURIComponent(result.error)}`, request.url))
