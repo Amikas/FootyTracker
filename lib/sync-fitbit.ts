@@ -1,35 +1,119 @@
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { getUserActivityData } from '@/app/actions/fitbit'
 
-const prisma = new PrismaClient()
+export async function syncFitbitData(
+  retryAttempts = 3
+): Promise<{ success: boolean; error?: string; data?: any }> {
+  // Format today's date
+  const today = new Date()
+  const formattedDate = today.toISOString().split('T')[0]
 
-export async function syncFitbitForDate(date: string) {
-  const result = await getUserActivityData(date)
+  // Try to get data with retries
+  let result = null
+  let attempts = 0
 
-  if (!result.success || !result.data) {
-    console.error('Failed to fetch Fitbit data:', result.error)
-    return { success: false, error: result.error }
+  while (attempts < retryAttempts) {
+    try {
+      result = await getUserActivityData(formattedDate)
+      if (result.success && result.data?.summary) {
+        break
+      }
+      attempts++
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 * Math.pow(2, attempts))
+      )
+    } catch (error) {
+      console.error(`Fitbit API error on attempt ${attempts + 1}:`, error)
+      attempts++
+      if (attempts >= retryAttempts) {
+        return {
+          success: false,
+          error: `Failed to fetch Fitbit data after ${retryAttempts} attempts`,
+        }
+      }
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 * Math.pow(2, attempts))
+      )
+    }
+  }
+
+  if (!result?.success || !result.data?.summary) {
+    console.log(`No data returned for ${formattedDate}, skipping update.`)
+    return { success: false, error: 'No data from Fitbit' }
   }
 
   const summary = result.data.summary
-  const distance = summary.distances.find((d: any) => d.activity === 'total')?.distance || 0
 
-  await prisma.fitbitActivity.upsert({
-    where: { date: new Date(date) },
-    update: {
-      duration: result.data.activities[0]?.duration || 0,
-      calories: result.data.activities[0]?.calories || 0,
-      steps: summary.steps || 0,
-      distance,
-    },
-    create: {
-      date: new Date(date),
-      duration: result.data.activities[0]?.duration || 0,
-      calories: result.data.activities[0]?.calories || 0,
-      steps: summary.steps || 0,
-      distance,
-    },
-  })
+  const steps = Math.max(0, summary.steps || 0)
+  const distance = Math.max(0, summary.distances?.[0]?.distance || 0)
+  const calories = Math.max(0, summary.caloriesOut || 0)
 
-  return { success: true }
+  let duration = 0
+  if (summary.activities && summary.activities.length > 0) {
+    duration = summary.activities.reduce(
+      (total: number, activity: any) => total + (activity.duration || 0),
+      0
+    )
+  } else {
+    duration = summary.fairlyActiveMinutes
+      ? summary.fairlyActiveMinutes * 60000
+      : 0
+  }
+
+  const hasRealData = steps > 0 || distance > 0 || calories > 0
+  if (!hasRealData) {
+    console.log(`Fitbit returned zero activity on ${formattedDate} — skipping.`)
+    return { success: false, error: 'No activity to record' }
+  }
+
+  try {
+    const existing = await prisma.fitbitActivity.findUnique({
+      where: { date: new Date(formattedDate) },
+    })
+
+    let totalSteps = steps
+    let totalDistance = distance
+    let totalCalories = calories
+    let totalDuration = duration
+
+    // If it's a manual record, add the Fitbit data to the manual entry
+    if (existing?.manual) {
+      console.log(
+        `Merging manual entry for ${formattedDate} with Fitbit sync data.`
+      )
+      totalSteps += existing.steps
+      totalDistance += existing.distance
+      totalCalories += existing.calories
+      totalDuration += existing.duration
+    }
+
+    const upserted = await prisma.fitbitActivity.upsert({
+      where: {
+        date: new Date(formattedDate),
+      },
+      update: {
+        steps: totalSteps,
+        distance: totalDistance,
+        calories: totalCalories,
+        duration: totalDuration,
+        lastUpdated: new Date(),
+        manual: existing?.manual || false,
+      },
+      create: {
+        date: new Date(formattedDate),
+        steps: totalSteps,
+        distance: totalDistance,
+        calories: totalCalories,
+        duration: totalDuration,
+        lastUpdated: new Date(),
+        manual: false,
+      },
+    })
+
+    console.log(`Successfully synced Fitbit data for ${formattedDate}`)
+    return { success: true, data: upserted }
+  } catch (error) {
+    console.error(`Database error while saving Fitbit data:`, error)
+    return { success: false, error: 'Failed to save data to database' }
+  }
 }

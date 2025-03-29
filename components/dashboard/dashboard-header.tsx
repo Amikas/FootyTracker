@@ -93,7 +93,6 @@ export default function DashboardHeader() {
                 <DropdownMenuItem asChild>
                   <Link href="/settings">Settings</Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
                 {isLoggedIn && (
                   <DropdownMenuItem onClick={handleLogout}>
                     Logout
