@@ -4,29 +4,24 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Bell, Menu, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-// import { toast } from "@/components/ui/use-toast" // Optional
+import ExportButton from "@/components/export-button"
 
 export default function DashboardHeader() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  // Use a ref to prevent re-fetching on every render
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [initialized, setInitialized] = useState(false)
 
+  // Only check login state once when component mounts
   useEffect(() => {
-    const loggedIn = localStorage.getItem("userId")
-    setIsLoggedIn(!!loggedIn)
-  }, [])
+    if (!initialized && typeof window !== 'undefined') {
+      const userId = localStorage.getItem("userId")
+      setIsLoggedIn(!!userId)
+      setInitialized(true)
+    }
+  }, [initialized])
 
   const handleLogout = () => {
     localStorage.removeItem("userId")
-    setIsLoggedIn(false)
-    // toast({ title: "Logged out successfully" }) // Optional
     window.location.href = "/"
   }
 
@@ -46,69 +41,27 @@ export default function DashboardHeader() {
           </nav>
 
           <div className="flex items-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="hidden md:inline-flex">Connect Apps</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Available Integrations</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/connect-fitbit" className="flex items-center space-x-2">
-                    <img src="/images/fitbit.png" alt="Fitbit" className="h-5 w-5 object-contain" />
-                    <span>Fitbit</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/connect-strava" className="flex items-center space-x-2">
-                    <img src="/images/strava.png" alt="Strava" className="h-5 w-5 object-contain" />
-                    <span>Strava</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/connect-nike" className="flex items-center space-x-2">
-                    <img src="/images/nike.png" alt="Nike" className="h-5 w-5 object-contain" />
-                    <span>Nike</span>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Export Button */}
+            {isLoggedIn && <ExportButton />}
 
-            <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5" />
-            </Button>
+            {/* Simple buttons instead of dropdowns */}
+            <Link href="/connect-fitbit">
+              <Button variant="outline" size="sm" className="hidden md:inline-flex">
+                Connect Fitbit
+              </Button>
+            </Link>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/settings">Settings</Link>
-                </DropdownMenuItem>
-                {isLoggedIn && (
-                  <DropdownMenuItem onClick={handleLogout}>
-                    Logout
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link href="/profile">
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
+            {isLoggedIn && (
+              <Button onClick={handleLogout} variant="ghost" size="sm">
+                Logout
+              </Button>
+            )}
           </div>
         </div>
       </div>
