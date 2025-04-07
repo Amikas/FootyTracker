@@ -1,22 +1,36 @@
-# ⚽ FootyTracker
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-**FootyTracker** is your personal football performance dashboard — built for players who want to track, analyze, and improve their training through real data from wearable devices like **Fitbit** (and soon: **Strava**, **Nike**, **Adidas**).
+## Getting Started
 
-## 🚀 Features
+First, run the development server:
 
-- 📈 **Performance Charts**: Weekly distance, speed, and heart rate visualized with live data.
-- 🔄 **Automatic Fitbit Sync**: Pull today's training sessions with a single click — or auto-sync on app load.
-- 📋 **Detailed Activity Logs**: See your latest workouts, calories burned, duration, and more.
-- 👤 **Profile Management**: Save your age, weight, height, and personal avatar — stored locally.
-- 🔒 **Local-Only Mode**: No cloud, no logins — all data stays on your device.
-- 🌗 **Dark Mode Ready** (via ShadCN + Tailwind CSS).
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## 🛠️ Tech Stack
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- **Next.js 15** with App Router
-- **TypeScript** (strict mode)
-- **Tailwind CSS** + ShadCN UI
-- **Prisma + PostgreSQL** (local database)
-- **Framer Motion** for slick animations
-- **Fitbit Web API** for real-time activity data
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -8,6 +8,13 @@ FootyTracker
 │   │   ├── fitbit.ts
 │   │   └── weeklyfetch.ts
 │   ├── api
+│   │   ├── auth
+│   │   │   ├── login
+│   │   │   │   └── route.ts
+│   │   │   ├── profile
+│   │   │   │   └── route.ts
+│   │   │   └── register
+│   │   │       └── route.ts
 │   │   ├── fitbit
 │   │   │   ├── callback
 │   │   │   │   └── route.js
@@ -29,6 +36,8 @@ FootyTracker
 │   │   └── page.tsx
 │   ├── globals.css
 │   ├── layout.tsx
+│   ├── login
+│   │   └── page.tsx
 │   ├── page.tsx
 │   └── profile
 │       └── page.tsx
@@ -108,6 +117,7 @@ FootyTracker
 ├── next.config.ts
 ├── package-lock.json
 ├── package.json
+├── pnpm-lock.yaml
 ├── postcss.config.mjs
 ├── prisma
 │   ├── migrations
@@ -116,6 +126,16 @@ FootyTracker
 │   │   ├── 20250327203218_add_unique_date
 │   │   │   └── migration.sql
 │   │   ├── 20250327215923_add_user_profile
+│   │   │   └── migration.sql
+│   │   ├── 20250329175146_add_last_updated
+│   │   │   └── migration.sql
+│   │   ├── 20250329182202_add_manual_override
+│   │   │   └── migration.sql
+│   │   ├── 20250329183610_random
+│   │   │   └── migration.sql
+│   │   ├── 20250329190438_random
+│   │   │   └── migration.sql
+│   │   ├── 20250329191355_add_password_to_user
 │   │   │   └── migration.sql
 │   │   └── migration_lock.toml
 │   └── schema.prisma
@@ -130,7 +150,6 @@ FootyTracker
 │   ├── placeholder.jpg
 │   └── placeholder.svg
 ├── styles
-│   └── globals.css
 ├── tailwind.config.ts
 ├── tree.txt
 └── tsconfig.json
