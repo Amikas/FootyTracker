@@ -1,74 +1,39 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ExportButton() {
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handleExportCSV = async () => {
-    if (isLoading) return
-    
-    setIsLoading(true)
+  const handleExport = async () => {
     try {
-      const response = await fetch('/api/export')
-      if (!response.ok) throw new Error('Export failed')
+      // TODO: Implement actual export logic
+      console.log("Exporting data...");
       
-      const result = await response.json()
-      if (!result.success) throw new Error(result.error || 'Export failed')
+      // Example implementation:
+      // 1. Fetch user data
+      // const userData = await fetchUserData();
+      // 2. Convert to desired format (CSV, JSON, etc.)
+      // const exportData = convertToFormat(userData);
+      // 3. Create and download file
+      // downloadFile(exportData);
       
-      // Convert to CSV
-      const csv = convertToCSV(result.data)
-      
-      // Create download
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `footy-tracker-export-${new Date().toISOString().split('T')[0]}.csv`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-      
-      alert('Export successful!')
+      // For now, just show an alert
+      alert("Export feature coming soon!");
     } catch (error) {
-      console.error('Export error:', error)
-      alert('Export failed. Please try again.')
-    } finally {
-      setIsLoading(false)
+      console.error("Export failed:", error);
+      alert("Failed to export data. Please try again.");
     }
-  }
+  };
 
   return (
     <Button
-      onClick={handleExportCSV}
-      disabled={isLoading}
+      onClick={handleExport}
       variant="outline"
       size="sm"
+      className="gap-2"
     >
-      {isLoading ? 'Exporting...' : 'Export CSV'}
+      <Download className="h-4 w-4" />
+      Export Data
     </Button>
-  )
-}
-
-// Helper function to convert data to CSV
-function convertToCSV(data) {
-  if (!data || !data.length) return ''
-  
-  const headers = Object.keys(data[0])
-  const csvRows = [
-    headers.join(','), // header row
-    ...data.map(row => {
-      return headers.map(field => {
-        const value = row[field]
-        // Handle special cases (strings with commas, etc.)
-        return typeof value === 'string' && value.includes(',') 
-          ? `"${value.replace(/"/g, '""')}"` 
-          : value
-      }).join(',')
-    })
-  ]
-  
-  return csvRows.join('\n')
+  );
 }

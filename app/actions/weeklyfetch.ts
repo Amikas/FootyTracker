@@ -1,6 +1,7 @@
 'use server'
 
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/prisma'
+import { getUserActivityData } from './fitbit'
 
 export async function fetchWeeklyChartData() {
   // Get past 7 days (most recent first)

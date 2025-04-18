@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/prisma'
 import { getUserActivityData } from '@/app/actions/fitbit'
 
 export async function syncFitbitData(

@@ -21,7 +21,7 @@ export async function GET() {
     },
   });
 
-  const formatted = activities.map((entry) => ({
+  const formatted = activities.map((entry: { date: string | number | Date; distance: any; }) => ({
     day: daysOfWeek[new Date(entry.date).getDay()],
     distance: entry.distance,
     speed: 12 + Math.random() * 3, // 🔧 Placeholder
