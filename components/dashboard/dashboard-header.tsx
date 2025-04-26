@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, Menu, User, LogOut, Activity, Smartphone } from "lucide-react";
+import { Bell, Menu, User, LogOut, Activity, Smartphone, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
@@ -11,6 +11,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from '@/components/ui/use-toast'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 interface NavLinkProps {
   href: string;
@@ -29,6 +32,7 @@ const NavLink = ({ href, children }: NavLinkProps) => (
 export default function DashboardHeader() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [initialized, setInitialized] = useState(false);
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (!initialized && typeof window !== "undefined") {
@@ -44,9 +48,7 @@ export default function DashboardHeader() {
   };
 
   const handleConnectApp = (app: string) => {
-    // Placeholder function for connecting different apps
-    console.log(`Connecting to ${app}...`);
-    // TODO: Implement actual connection logic
+    window.location.href = `/connect-${app.toLowerCase()}`;
   };
 
   return (
@@ -67,65 +69,89 @@ export default function DashboardHeader() {
             <NavLink href="/training">Training</NavLink>
             <NavLink href="/stats">Stats</NavLink>
             <NavLink href="/goals">Goals</NavLink>
+            <NavLink href="/calendar">Calendar</NavLink>
           </nav>
 
           <div className="flex items-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="hidden md:inline-flex gap-2"
-                >
-                  <Smartphone className="h-4 w-4" />
-                  Connect Apps
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem
-                  onClick={() => handleConnectApp("fitbit")}
-                  className="gap-2"
-                >
-                  <Activity className="h-4 w-4" />
-                  Connect Fitbit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => handleConnectApp("strava")}
-                  className="gap-2"
-                >
-                  <Activity className="h-4 w-4" />
-                  Connect Strava
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => handleConnectApp("nike")}
-                  className="gap-2"
-                >
-                  <Activity className="h-4 w-4" />
-                  Connect Nike
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {isLoggedIn ? (
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="hidden md:inline-flex gap-2"
+                    >
+                      <Smartphone className="h-4 w-4" />
+                      Connect Apps
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem
+                      onClick={() => handleConnectApp("fitbit")}
+                      className="gap-2"
+                    >
+                      <Activity className="h-4 w-4" />
+                      Connect Fitbit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleConnectApp("strava")}
+                      className="gap-2"
+                    >
+                      <Activity className="h-4 w-4" />
+                      Connect Strava
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleConnectApp("nike")}
+                      className="gap-2"
+                    >
+                      <Activity className="h-4 w-4" />
+                      Connect Nike
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
-            <Link href="/profile">
-              <Button variant="ghost" size="icon" className="hover:bg-accent">
-                <User className="h-5 w-5" />
-              </Button>
-            </Link>
+                <ThemeToggle />
 
-            {isLoggedIn && (
-              <Button 
-                onClick={handleLogout} 
-                variant="ghost" 
-                size="sm" 
-                className="gap-2 hover:bg-destructive/90 hover:text-destructive-foreground"
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
+                {/* User Menu */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon" className="hover:bg-accent">
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-56" align="end" forceMount>
+                    <div className="space-y-1">
+                      <Button variant="ghost" className="w-full justify-start" asChild>
+                        <a href="/profile">
+                          <User className="mr-2 h-4 w-4" />
+                          Profile
+                        </a>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start" asChild>
+                        <a href="/settings">
+                          <Settings className="mr-2 h-4 w-4" />
+                          Settings
+                        </a>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log out
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </>
+            ) : (
+              <>
+                <ThemeToggle />
+                <Link href="/login">
+                  <Button variant="default" size="sm">
+                    Log In
+                  </Button>
+                </Link>
+              </>
             )}
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
           </div>
         </div>
       </div>

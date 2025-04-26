@@ -1,21 +1,15 @@
-import { PrismaClient } from "@prisma/client";
-
+import { PrismaClient } from "../prisma/generated/client";
 
 declare global {
-  var prisma: PrismaClient | undefined
+  var prisma: PrismaClient | undefined;
 }
 
-let prisma: PrismaClient
+const prisma = global.prisma || new PrismaClient({
+  log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+});
 
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
-} else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient({
-      log: ['query'], // optional: logs SQL queries for debugging
-    })
-  }
-  prisma = global.prisma
+if (process.env.NODE_ENV !== "production") {
+  global.prisma = prisma;
 }
 
-export default prisma
+export default prisma;

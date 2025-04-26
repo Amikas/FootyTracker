@@ -164,8 +164,8 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
           id, 
           progress,
           completed: progress >= (type === 'weekly' 
-            ? weeklyGoals.find(g => g.id === id)?.target 
-            : monthlyGoals.find(g => g.id === id)?.target) 
+            ? weeklyGoals.find(g => g.id === id)?.target ?? 0 
+            : monthlyGoals.find(g => g.id === id)?.target ?? 0) 
         }),
       })
 

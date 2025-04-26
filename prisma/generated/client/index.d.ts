@@ -28,6 +28,16 @@ export type UserProfile = $Result.DefaultSelection<Prisma.$UserProfilePayload>
  * 
  */
 export type Goal = $Result.DefaultSelection<Prisma.$GoalPayload>
+/**
+ * Model CalendarEvent
+ * 
+ */
+export type CalendarEvent = $Result.DefaultSelection<Prisma.$CalendarEventPayload>
+/**
+ * Model EventAttachment
+ * 
+ */
+export type EventAttachment = $Result.DefaultSelection<Prisma.$EventAttachmentPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -183,6 +193,26 @@ export class PrismaClient<
     * ```
     */
   get goal(): Prisma.GoalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.calendarEvent`: Exposes CRUD operations for the **CalendarEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CalendarEvents
+    * const calendarEvents = await prisma.calendarEvent.findMany()
+    * ```
+    */
+  get calendarEvent(): Prisma.CalendarEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.eventAttachment`: Exposes CRUD operations for the **EventAttachment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EventAttachments
+    * const eventAttachments = await prisma.eventAttachment.findMany()
+    * ```
+    */
+  get eventAttachment(): Prisma.EventAttachmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -625,7 +655,9 @@ export namespace Prisma {
   export const ModelName: {
     FitbitActivity: 'FitbitActivity',
     UserProfile: 'UserProfile',
-    Goal: 'Goal'
+    Goal: 'Goal',
+    CalendarEvent: 'CalendarEvent',
+    EventAttachment: 'EventAttachment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -644,7 +676,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "fitbitActivity" | "userProfile" | "goal"
+      modelProps: "fitbitActivity" | "userProfile" | "goal" | "calendarEvent" | "eventAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -870,6 +902,154 @@ export namespace Prisma {
           }
         }
       }
+      CalendarEvent: {
+        payload: Prisma.$CalendarEventPayload<ExtArgs>
+        fields: Prisma.CalendarEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CalendarEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CalendarEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+          }
+          findFirst: {
+            args: Prisma.CalendarEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CalendarEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+          }
+          findMany: {
+            args: Prisma.CalendarEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>[]
+          }
+          create: {
+            args: Prisma.CalendarEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+          }
+          createMany: {
+            args: Prisma.CalendarEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CalendarEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>[]
+          }
+          delete: {
+            args: Prisma.CalendarEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+          }
+          update: {
+            args: Prisma.CalendarEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.CalendarEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CalendarEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CalendarEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.CalendarEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarEventPayload>
+          }
+          aggregate: {
+            args: Prisma.CalendarEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCalendarEvent>
+          }
+          groupBy: {
+            args: Prisma.CalendarEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CalendarEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CalendarEventCountArgs<ExtArgs>
+            result: $Utils.Optional<CalendarEventCountAggregateOutputType> | number
+          }
+        }
+      }
+      EventAttachment: {
+        payload: Prisma.$EventAttachmentPayload<ExtArgs>
+        fields: Prisma.EventAttachmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EventAttachmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EventAttachmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>
+          }
+          findFirst: {
+            args: Prisma.EventAttachmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EventAttachmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>
+          }
+          findMany: {
+            args: Prisma.EventAttachmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>[]
+          }
+          create: {
+            args: Prisma.EventAttachmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>
+          }
+          createMany: {
+            args: Prisma.EventAttachmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EventAttachmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>[]
+          }
+          delete: {
+            args: Prisma.EventAttachmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>
+          }
+          update: {
+            args: Prisma.EventAttachmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.EventAttachmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EventAttachmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EventAttachmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.EventAttachmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventAttachmentPayload>
+          }
+          aggregate: {
+            args: Prisma.EventAttachmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEventAttachment>
+          }
+          groupBy: {
+            args: Prisma.EventAttachmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EventAttachmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EventAttachmentCountArgs<ExtArgs>
+            result: $Utils.Optional<EventAttachmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -957,6 +1137,8 @@ export namespace Prisma {
     fitbitActivity?: FitbitActivityOmit
     userProfile?: UserProfileOmit
     goal?: GoalOmit
+    calendarEvent?: CalendarEventOmit
+    eventAttachment?: EventAttachmentOmit
   }
 
   /* Types for Logging */
@@ -1045,6 +1227,36 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type CalendarEventCountOutputType
+   */
+
+  export type CalendarEventCountOutputType = {
+    attachments: number
+  }
+
+  export type CalendarEventCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attachments?: boolean | CalendarEventCountOutputTypeCountAttachmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CalendarEventCountOutputType without action
+   */
+  export type CalendarEventCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEventCountOutputType
+     */
+    select?: CalendarEventCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CalendarEventCountOutputType without action
+   */
+  export type CalendarEventCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventAttachmentWhereInput
+  }
 
 
   /**
@@ -4371,6 +4583,2358 @@ export namespace Prisma {
 
 
   /**
+   * Model CalendarEvent
+   */
+
+  export type AggregateCalendarEvent = {
+    _count: CalendarEventCountAggregateOutputType | null
+    _avg: CalendarEventAvgAggregateOutputType | null
+    _sum: CalendarEventSumAggregateOutputType | null
+    _min: CalendarEventMinAggregateOutputType | null
+    _max: CalendarEventMaxAggregateOutputType | null
+  }
+
+  export type CalendarEventAvgAggregateOutputType = {
+    reminderBefore: number | null
+  }
+
+  export type CalendarEventSumAggregateOutputType = {
+    reminderBefore: number | null
+  }
+
+  export type CalendarEventMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    description: string | null
+    startDate: Date | null
+    endDate: Date | null
+    allDay: boolean | null
+    location: string | null
+    color: string | null
+    isRecurring: boolean | null
+    recurrenceRule: string | null
+    reminderBefore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CalendarEventMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    description: string | null
+    startDate: Date | null
+    endDate: Date | null
+    allDay: boolean | null
+    location: string | null
+    color: string | null
+    isRecurring: boolean | null
+    recurrenceRule: string | null
+    reminderBefore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CalendarEventCountAggregateOutputType = {
+    id: number
+    userId: number
+    title: number
+    description: number
+    startDate: number
+    endDate: number
+    allDay: number
+    location: number
+    color: number
+    isRecurring: number
+    recurrenceRule: number
+    reminderBefore: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CalendarEventAvgAggregateInputType = {
+    reminderBefore?: true
+  }
+
+  export type CalendarEventSumAggregateInputType = {
+    reminderBefore?: true
+  }
+
+  export type CalendarEventMinAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    allDay?: true
+    location?: true
+    color?: true
+    isRecurring?: true
+    recurrenceRule?: true
+    reminderBefore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CalendarEventMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    allDay?: true
+    location?: true
+    color?: true
+    isRecurring?: true
+    recurrenceRule?: true
+    reminderBefore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CalendarEventCountAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    allDay?: true
+    location?: true
+    color?: true
+    isRecurring?: true
+    recurrenceRule?: true
+    reminderBefore?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CalendarEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CalendarEvent to aggregate.
+     */
+    where?: CalendarEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarEvents to fetch.
+     */
+    orderBy?: CalendarEventOrderByWithRelationInput | CalendarEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CalendarEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CalendarEvents
+    **/
+    _count?: true | CalendarEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CalendarEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CalendarEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CalendarEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CalendarEventMaxAggregateInputType
+  }
+
+  export type GetCalendarEventAggregateType<T extends CalendarEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateCalendarEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCalendarEvent[P]>
+      : GetScalarType<T[P], AggregateCalendarEvent[P]>
+  }
+
+
+
+
+  export type CalendarEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CalendarEventWhereInput
+    orderBy?: CalendarEventOrderByWithAggregationInput | CalendarEventOrderByWithAggregationInput[]
+    by: CalendarEventScalarFieldEnum[] | CalendarEventScalarFieldEnum
+    having?: CalendarEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CalendarEventCountAggregateInputType | true
+    _avg?: CalendarEventAvgAggregateInputType
+    _sum?: CalendarEventSumAggregateInputType
+    _min?: CalendarEventMinAggregateInputType
+    _max?: CalendarEventMaxAggregateInputType
+  }
+
+  export type CalendarEventGroupByOutputType = {
+    id: string
+    userId: string
+    title: string
+    description: string | null
+    startDate: Date
+    endDate: Date
+    allDay: boolean
+    location: string | null
+    color: string | null
+    isRecurring: boolean
+    recurrenceRule: string | null
+    reminderBefore: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CalendarEventCountAggregateOutputType | null
+    _avg: CalendarEventAvgAggregateOutputType | null
+    _sum: CalendarEventSumAggregateOutputType | null
+    _min: CalendarEventMinAggregateOutputType | null
+    _max: CalendarEventMaxAggregateOutputType | null
+  }
+
+  type GetCalendarEventGroupByPayload<T extends CalendarEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CalendarEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CalendarEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CalendarEventGroupByOutputType[P]>
+            : GetScalarType<T[P], CalendarEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CalendarEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    allDay?: boolean
+    location?: boolean
+    color?: boolean
+    isRecurring?: boolean
+    recurrenceRule?: boolean
+    reminderBefore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    attachments?: boolean | CalendarEvent$attachmentsArgs<ExtArgs>
+    _count?: boolean | CalendarEventCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["calendarEvent"]>
+
+  export type CalendarEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    allDay?: boolean
+    location?: boolean
+    color?: boolean
+    isRecurring?: boolean
+    recurrenceRule?: boolean
+    reminderBefore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["calendarEvent"]>
+
+  export type CalendarEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    allDay?: boolean
+    location?: boolean
+    color?: boolean
+    isRecurring?: boolean
+    recurrenceRule?: boolean
+    reminderBefore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["calendarEvent"]>
+
+  export type CalendarEventSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    allDay?: boolean
+    location?: boolean
+    color?: boolean
+    isRecurring?: boolean
+    recurrenceRule?: boolean
+    reminderBefore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CalendarEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "startDate" | "endDate" | "allDay" | "location" | "color" | "isRecurring" | "recurrenceRule" | "reminderBefore" | "createdAt" | "updatedAt", ExtArgs["result"]["calendarEvent"]>
+  export type CalendarEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attachments?: boolean | CalendarEvent$attachmentsArgs<ExtArgs>
+    _count?: boolean | CalendarEventCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CalendarEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type CalendarEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $CalendarEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CalendarEvent"
+    objects: {
+      attachments: Prisma.$EventAttachmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      title: string
+      description: string | null
+      startDate: Date
+      endDate: Date
+      allDay: boolean
+      location: string | null
+      color: string | null
+      isRecurring: boolean
+      recurrenceRule: string | null
+      reminderBefore: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["calendarEvent"]>
+    composites: {}
+  }
+
+  type CalendarEventGetPayload<S extends boolean | null | undefined | CalendarEventDefaultArgs> = $Result.GetResult<Prisma.$CalendarEventPayload, S>
+
+  type CalendarEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CalendarEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CalendarEventCountAggregateInputType | true
+    }
+
+  export interface CalendarEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CalendarEvent'], meta: { name: 'CalendarEvent' } }
+    /**
+     * Find zero or one CalendarEvent that matches the filter.
+     * @param {CalendarEventFindUniqueArgs} args - Arguments to find a CalendarEvent
+     * @example
+     * // Get one CalendarEvent
+     * const calendarEvent = await prisma.calendarEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CalendarEventFindUniqueArgs>(args: SelectSubset<T, CalendarEventFindUniqueArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CalendarEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CalendarEventFindUniqueOrThrowArgs} args - Arguments to find a CalendarEvent
+     * @example
+     * // Get one CalendarEvent
+     * const calendarEvent = await prisma.calendarEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CalendarEventFindUniqueOrThrowArgs>(args: SelectSubset<T, CalendarEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CalendarEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarEventFindFirstArgs} args - Arguments to find a CalendarEvent
+     * @example
+     * // Get one CalendarEvent
+     * const calendarEvent = await prisma.calendarEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CalendarEventFindFirstArgs>(args?: SelectSubset<T, CalendarEventFindFirstArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CalendarEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarEventFindFirstOrThrowArgs} args - Arguments to find a CalendarEvent
+     * @example
+     * // Get one CalendarEvent
+     * const calendarEvent = await prisma.calendarEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CalendarEventFindFirstOrThrowArgs>(args?: SelectSubset<T, CalendarEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CalendarEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CalendarEvents
+     * const calendarEvents = await prisma.calendarEvent.findMany()
+     * 
+     * // Get first 10 CalendarEvents
+     * const calendarEvents = await prisma.calendarEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const calendarEventWithIdOnly = await prisma.calendarEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CalendarEventFindManyArgs>(args?: SelectSubset<T, CalendarEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CalendarEvent.
+     * @param {CalendarEventCreateArgs} args - Arguments to create a CalendarEvent.
+     * @example
+     * // Create one CalendarEvent
+     * const CalendarEvent = await prisma.calendarEvent.create({
+     *   data: {
+     *     // ... data to create a CalendarEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends CalendarEventCreateArgs>(args: SelectSubset<T, CalendarEventCreateArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CalendarEvents.
+     * @param {CalendarEventCreateManyArgs} args - Arguments to create many CalendarEvents.
+     * @example
+     * // Create many CalendarEvents
+     * const calendarEvent = await prisma.calendarEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CalendarEventCreateManyArgs>(args?: SelectSubset<T, CalendarEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CalendarEvents and returns the data saved in the database.
+     * @param {CalendarEventCreateManyAndReturnArgs} args - Arguments to create many CalendarEvents.
+     * @example
+     * // Create many CalendarEvents
+     * const calendarEvent = await prisma.calendarEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CalendarEvents and only return the `id`
+     * const calendarEventWithIdOnly = await prisma.calendarEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CalendarEventCreateManyAndReturnArgs>(args?: SelectSubset<T, CalendarEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CalendarEvent.
+     * @param {CalendarEventDeleteArgs} args - Arguments to delete one CalendarEvent.
+     * @example
+     * // Delete one CalendarEvent
+     * const CalendarEvent = await prisma.calendarEvent.delete({
+     *   where: {
+     *     // ... filter to delete one CalendarEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CalendarEventDeleteArgs>(args: SelectSubset<T, CalendarEventDeleteArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CalendarEvent.
+     * @param {CalendarEventUpdateArgs} args - Arguments to update one CalendarEvent.
+     * @example
+     * // Update one CalendarEvent
+     * const calendarEvent = await prisma.calendarEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CalendarEventUpdateArgs>(args: SelectSubset<T, CalendarEventUpdateArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CalendarEvents.
+     * @param {CalendarEventDeleteManyArgs} args - Arguments to filter CalendarEvents to delete.
+     * @example
+     * // Delete a few CalendarEvents
+     * const { count } = await prisma.calendarEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CalendarEventDeleteManyArgs>(args?: SelectSubset<T, CalendarEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CalendarEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CalendarEvents
+     * const calendarEvent = await prisma.calendarEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CalendarEventUpdateManyArgs>(args: SelectSubset<T, CalendarEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CalendarEvents and returns the data updated in the database.
+     * @param {CalendarEventUpdateManyAndReturnArgs} args - Arguments to update many CalendarEvents.
+     * @example
+     * // Update many CalendarEvents
+     * const calendarEvent = await prisma.calendarEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CalendarEvents and only return the `id`
+     * const calendarEventWithIdOnly = await prisma.calendarEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CalendarEventUpdateManyAndReturnArgs>(args: SelectSubset<T, CalendarEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CalendarEvent.
+     * @param {CalendarEventUpsertArgs} args - Arguments to update or create a CalendarEvent.
+     * @example
+     * // Update or create a CalendarEvent
+     * const calendarEvent = await prisma.calendarEvent.upsert({
+     *   create: {
+     *     // ... data to create a CalendarEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CalendarEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CalendarEventUpsertArgs>(args: SelectSubset<T, CalendarEventUpsertArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CalendarEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarEventCountArgs} args - Arguments to filter CalendarEvents to count.
+     * @example
+     * // Count the number of CalendarEvents
+     * const count = await prisma.calendarEvent.count({
+     *   where: {
+     *     // ... the filter for the CalendarEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends CalendarEventCountArgs>(
+      args?: Subset<T, CalendarEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CalendarEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CalendarEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CalendarEventAggregateArgs>(args: Subset<T, CalendarEventAggregateArgs>): Prisma.PrismaPromise<GetCalendarEventAggregateType<T>>
+
+    /**
+     * Group by CalendarEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CalendarEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CalendarEventGroupByArgs['orderBy'] }
+        : { orderBy?: CalendarEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CalendarEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCalendarEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CalendarEvent model
+   */
+  readonly fields: CalendarEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CalendarEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CalendarEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    attachments<T extends CalendarEvent$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, CalendarEvent$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CalendarEvent model
+   */
+  interface CalendarEventFieldRefs {
+    readonly id: FieldRef<"CalendarEvent", 'String'>
+    readonly userId: FieldRef<"CalendarEvent", 'String'>
+    readonly title: FieldRef<"CalendarEvent", 'String'>
+    readonly description: FieldRef<"CalendarEvent", 'String'>
+    readonly startDate: FieldRef<"CalendarEvent", 'DateTime'>
+    readonly endDate: FieldRef<"CalendarEvent", 'DateTime'>
+    readonly allDay: FieldRef<"CalendarEvent", 'Boolean'>
+    readonly location: FieldRef<"CalendarEvent", 'String'>
+    readonly color: FieldRef<"CalendarEvent", 'String'>
+    readonly isRecurring: FieldRef<"CalendarEvent", 'Boolean'>
+    readonly recurrenceRule: FieldRef<"CalendarEvent", 'String'>
+    readonly reminderBefore: FieldRef<"CalendarEvent", 'Int'>
+    readonly createdAt: FieldRef<"CalendarEvent", 'DateTime'>
+    readonly updatedAt: FieldRef<"CalendarEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CalendarEvent findUnique
+   */
+  export type CalendarEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarEvent to fetch.
+     */
+    where: CalendarEventWhereUniqueInput
+  }
+
+  /**
+   * CalendarEvent findUniqueOrThrow
+   */
+  export type CalendarEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarEvent to fetch.
+     */
+    where: CalendarEventWhereUniqueInput
+  }
+
+  /**
+   * CalendarEvent findFirst
+   */
+  export type CalendarEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarEvent to fetch.
+     */
+    where?: CalendarEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarEvents to fetch.
+     */
+    orderBy?: CalendarEventOrderByWithRelationInput | CalendarEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CalendarEvents.
+     */
+    cursor?: CalendarEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CalendarEvents.
+     */
+    distinct?: CalendarEventScalarFieldEnum | CalendarEventScalarFieldEnum[]
+  }
+
+  /**
+   * CalendarEvent findFirstOrThrow
+   */
+  export type CalendarEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarEvent to fetch.
+     */
+    where?: CalendarEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarEvents to fetch.
+     */
+    orderBy?: CalendarEventOrderByWithRelationInput | CalendarEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CalendarEvents.
+     */
+    cursor?: CalendarEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CalendarEvents.
+     */
+    distinct?: CalendarEventScalarFieldEnum | CalendarEventScalarFieldEnum[]
+  }
+
+  /**
+   * CalendarEvent findMany
+   */
+  export type CalendarEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarEvents to fetch.
+     */
+    where?: CalendarEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarEvents to fetch.
+     */
+    orderBy?: CalendarEventOrderByWithRelationInput | CalendarEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CalendarEvents.
+     */
+    cursor?: CalendarEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarEvents.
+     */
+    skip?: number
+    distinct?: CalendarEventScalarFieldEnum | CalendarEventScalarFieldEnum[]
+  }
+
+  /**
+   * CalendarEvent create
+   */
+  export type CalendarEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CalendarEvent.
+     */
+    data: XOR<CalendarEventCreateInput, CalendarEventUncheckedCreateInput>
+  }
+
+  /**
+   * CalendarEvent createMany
+   */
+  export type CalendarEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CalendarEvents.
+     */
+    data: CalendarEventCreateManyInput | CalendarEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CalendarEvent createManyAndReturn
+   */
+  export type CalendarEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many CalendarEvents.
+     */
+    data: CalendarEventCreateManyInput | CalendarEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CalendarEvent update
+   */
+  export type CalendarEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CalendarEvent.
+     */
+    data: XOR<CalendarEventUpdateInput, CalendarEventUncheckedUpdateInput>
+    /**
+     * Choose, which CalendarEvent to update.
+     */
+    where: CalendarEventWhereUniqueInput
+  }
+
+  /**
+   * CalendarEvent updateMany
+   */
+  export type CalendarEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CalendarEvents.
+     */
+    data: XOR<CalendarEventUpdateManyMutationInput, CalendarEventUncheckedUpdateManyInput>
+    /**
+     * Filter which CalendarEvents to update
+     */
+    where?: CalendarEventWhereInput
+    /**
+     * Limit how many CalendarEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CalendarEvent updateManyAndReturn
+   */
+  export type CalendarEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * The data used to update CalendarEvents.
+     */
+    data: XOR<CalendarEventUpdateManyMutationInput, CalendarEventUncheckedUpdateManyInput>
+    /**
+     * Filter which CalendarEvents to update
+     */
+    where?: CalendarEventWhereInput
+    /**
+     * Limit how many CalendarEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CalendarEvent upsert
+   */
+  export type CalendarEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CalendarEvent to update in case it exists.
+     */
+    where: CalendarEventWhereUniqueInput
+    /**
+     * In case the CalendarEvent found by the `where` argument doesn't exist, create a new CalendarEvent with this data.
+     */
+    create: XOR<CalendarEventCreateInput, CalendarEventUncheckedCreateInput>
+    /**
+     * In case the CalendarEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CalendarEventUpdateInput, CalendarEventUncheckedUpdateInput>
+  }
+
+  /**
+   * CalendarEvent delete
+   */
+  export type CalendarEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+    /**
+     * Filter which CalendarEvent to delete.
+     */
+    where: CalendarEventWhereUniqueInput
+  }
+
+  /**
+   * CalendarEvent deleteMany
+   */
+  export type CalendarEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CalendarEvents to delete
+     */
+    where?: CalendarEventWhereInput
+    /**
+     * Limit how many CalendarEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CalendarEvent.attachments
+   */
+  export type CalendarEvent$attachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    where?: EventAttachmentWhereInput
+    orderBy?: EventAttachmentOrderByWithRelationInput | EventAttachmentOrderByWithRelationInput[]
+    cursor?: EventAttachmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventAttachmentScalarFieldEnum | EventAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * CalendarEvent without action
+   */
+  export type CalendarEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarEvent
+     */
+    select?: CalendarEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarEvent
+     */
+    omit?: CalendarEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarEventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EventAttachment
+   */
+
+  export type AggregateEventAttachment = {
+    _count: EventAttachmentCountAggregateOutputType | null
+    _avg: EventAttachmentAvgAggregateOutputType | null
+    _sum: EventAttachmentSumAggregateOutputType | null
+    _min: EventAttachmentMinAggregateOutputType | null
+    _max: EventAttachmentMaxAggregateOutputType | null
+  }
+
+  export type EventAttachmentAvgAggregateOutputType = {
+    size: number | null
+  }
+
+  export type EventAttachmentSumAggregateOutputType = {
+    size: number | null
+  }
+
+  export type EventAttachmentMinAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    name: string | null
+    type: string | null
+    url: string | null
+    size: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EventAttachmentMaxAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    name: string | null
+    type: string | null
+    url: string | null
+    size: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EventAttachmentCountAggregateOutputType = {
+    id: number
+    eventId: number
+    name: number
+    type: number
+    url: number
+    size: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type EventAttachmentAvgAggregateInputType = {
+    size?: true
+  }
+
+  export type EventAttachmentSumAggregateInputType = {
+    size?: true
+  }
+
+  export type EventAttachmentMinAggregateInputType = {
+    id?: true
+    eventId?: true
+    name?: true
+    type?: true
+    url?: true
+    size?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EventAttachmentMaxAggregateInputType = {
+    id?: true
+    eventId?: true
+    name?: true
+    type?: true
+    url?: true
+    size?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EventAttachmentCountAggregateInputType = {
+    id?: true
+    eventId?: true
+    name?: true
+    type?: true
+    url?: true
+    size?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type EventAttachmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EventAttachment to aggregate.
+     */
+    where?: EventAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventAttachments to fetch.
+     */
+    orderBy?: EventAttachmentOrderByWithRelationInput | EventAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EventAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EventAttachments
+    **/
+    _count?: true | EventAttachmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EventAttachmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EventAttachmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EventAttachmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EventAttachmentMaxAggregateInputType
+  }
+
+  export type GetEventAttachmentAggregateType<T extends EventAttachmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateEventAttachment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEventAttachment[P]>
+      : GetScalarType<T[P], AggregateEventAttachment[P]>
+  }
+
+
+
+
+  export type EventAttachmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventAttachmentWhereInput
+    orderBy?: EventAttachmentOrderByWithAggregationInput | EventAttachmentOrderByWithAggregationInput[]
+    by: EventAttachmentScalarFieldEnum[] | EventAttachmentScalarFieldEnum
+    having?: EventAttachmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EventAttachmentCountAggregateInputType | true
+    _avg?: EventAttachmentAvgAggregateInputType
+    _sum?: EventAttachmentSumAggregateInputType
+    _min?: EventAttachmentMinAggregateInputType
+    _max?: EventAttachmentMaxAggregateInputType
+  }
+
+  export type EventAttachmentGroupByOutputType = {
+    id: string
+    eventId: string
+    name: string
+    type: string
+    url: string
+    size: number
+    createdAt: Date
+    updatedAt: Date
+    _count: EventAttachmentCountAggregateOutputType | null
+    _avg: EventAttachmentAvgAggregateOutputType | null
+    _sum: EventAttachmentSumAggregateOutputType | null
+    _min: EventAttachmentMinAggregateOutputType | null
+    _max: EventAttachmentMaxAggregateOutputType | null
+  }
+
+  type GetEventAttachmentGroupByPayload<T extends EventAttachmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EventAttachmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EventAttachmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EventAttachmentGroupByOutputType[P]>
+            : GetScalarType<T[P], EventAttachmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EventAttachmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    size?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | CalendarEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["eventAttachment"]>
+
+  export type EventAttachmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    size?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | CalendarEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["eventAttachment"]>
+
+  export type EventAttachmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    size?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | CalendarEventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["eventAttachment"]>
+
+  export type EventAttachmentSelectScalar = {
+    id?: boolean
+    eventId?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    size?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type EventAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "name" | "type" | "url" | "size" | "createdAt" | "updatedAt", ExtArgs["result"]["eventAttachment"]>
+  export type EventAttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | CalendarEventDefaultArgs<ExtArgs>
+  }
+  export type EventAttachmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | CalendarEventDefaultArgs<ExtArgs>
+  }
+  export type EventAttachmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | CalendarEventDefaultArgs<ExtArgs>
+  }
+
+  export type $EventAttachmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EventAttachment"
+    objects: {
+      event: Prisma.$CalendarEventPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      eventId: string
+      name: string
+      type: string
+      url: string
+      size: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["eventAttachment"]>
+    composites: {}
+  }
+
+  type EventAttachmentGetPayload<S extends boolean | null | undefined | EventAttachmentDefaultArgs> = $Result.GetResult<Prisma.$EventAttachmentPayload, S>
+
+  type EventAttachmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EventAttachmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EventAttachmentCountAggregateInputType | true
+    }
+
+  export interface EventAttachmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EventAttachment'], meta: { name: 'EventAttachment' } }
+    /**
+     * Find zero or one EventAttachment that matches the filter.
+     * @param {EventAttachmentFindUniqueArgs} args - Arguments to find a EventAttachment
+     * @example
+     * // Get one EventAttachment
+     * const eventAttachment = await prisma.eventAttachment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EventAttachmentFindUniqueArgs>(args: SelectSubset<T, EventAttachmentFindUniqueArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EventAttachment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EventAttachmentFindUniqueOrThrowArgs} args - Arguments to find a EventAttachment
+     * @example
+     * // Get one EventAttachment
+     * const eventAttachment = await prisma.eventAttachment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EventAttachmentFindUniqueOrThrowArgs>(args: SelectSubset<T, EventAttachmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EventAttachment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAttachmentFindFirstArgs} args - Arguments to find a EventAttachment
+     * @example
+     * // Get one EventAttachment
+     * const eventAttachment = await prisma.eventAttachment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EventAttachmentFindFirstArgs>(args?: SelectSubset<T, EventAttachmentFindFirstArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EventAttachment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAttachmentFindFirstOrThrowArgs} args - Arguments to find a EventAttachment
+     * @example
+     * // Get one EventAttachment
+     * const eventAttachment = await prisma.eventAttachment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EventAttachmentFindFirstOrThrowArgs>(args?: SelectSubset<T, EventAttachmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EventAttachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAttachmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EventAttachments
+     * const eventAttachments = await prisma.eventAttachment.findMany()
+     * 
+     * // Get first 10 EventAttachments
+     * const eventAttachments = await prisma.eventAttachment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const eventAttachmentWithIdOnly = await prisma.eventAttachment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EventAttachmentFindManyArgs>(args?: SelectSubset<T, EventAttachmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EventAttachment.
+     * @param {EventAttachmentCreateArgs} args - Arguments to create a EventAttachment.
+     * @example
+     * // Create one EventAttachment
+     * const EventAttachment = await prisma.eventAttachment.create({
+     *   data: {
+     *     // ... data to create a EventAttachment
+     *   }
+     * })
+     * 
+     */
+    create<T extends EventAttachmentCreateArgs>(args: SelectSubset<T, EventAttachmentCreateArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EventAttachments.
+     * @param {EventAttachmentCreateManyArgs} args - Arguments to create many EventAttachments.
+     * @example
+     * // Create many EventAttachments
+     * const eventAttachment = await prisma.eventAttachment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EventAttachmentCreateManyArgs>(args?: SelectSubset<T, EventAttachmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EventAttachments and returns the data saved in the database.
+     * @param {EventAttachmentCreateManyAndReturnArgs} args - Arguments to create many EventAttachments.
+     * @example
+     * // Create many EventAttachments
+     * const eventAttachment = await prisma.eventAttachment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EventAttachments and only return the `id`
+     * const eventAttachmentWithIdOnly = await prisma.eventAttachment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EventAttachmentCreateManyAndReturnArgs>(args?: SelectSubset<T, EventAttachmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EventAttachment.
+     * @param {EventAttachmentDeleteArgs} args - Arguments to delete one EventAttachment.
+     * @example
+     * // Delete one EventAttachment
+     * const EventAttachment = await prisma.eventAttachment.delete({
+     *   where: {
+     *     // ... filter to delete one EventAttachment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EventAttachmentDeleteArgs>(args: SelectSubset<T, EventAttachmentDeleteArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EventAttachment.
+     * @param {EventAttachmentUpdateArgs} args - Arguments to update one EventAttachment.
+     * @example
+     * // Update one EventAttachment
+     * const eventAttachment = await prisma.eventAttachment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EventAttachmentUpdateArgs>(args: SelectSubset<T, EventAttachmentUpdateArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EventAttachments.
+     * @param {EventAttachmentDeleteManyArgs} args - Arguments to filter EventAttachments to delete.
+     * @example
+     * // Delete a few EventAttachments
+     * const { count } = await prisma.eventAttachment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EventAttachmentDeleteManyArgs>(args?: SelectSubset<T, EventAttachmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EventAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAttachmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EventAttachments
+     * const eventAttachment = await prisma.eventAttachment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EventAttachmentUpdateManyArgs>(args: SelectSubset<T, EventAttachmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EventAttachments and returns the data updated in the database.
+     * @param {EventAttachmentUpdateManyAndReturnArgs} args - Arguments to update many EventAttachments.
+     * @example
+     * // Update many EventAttachments
+     * const eventAttachment = await prisma.eventAttachment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EventAttachments and only return the `id`
+     * const eventAttachmentWithIdOnly = await prisma.eventAttachment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EventAttachmentUpdateManyAndReturnArgs>(args: SelectSubset<T, EventAttachmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EventAttachment.
+     * @param {EventAttachmentUpsertArgs} args - Arguments to update or create a EventAttachment.
+     * @example
+     * // Update or create a EventAttachment
+     * const eventAttachment = await prisma.eventAttachment.upsert({
+     *   create: {
+     *     // ... data to create a EventAttachment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EventAttachment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EventAttachmentUpsertArgs>(args: SelectSubset<T, EventAttachmentUpsertArgs<ExtArgs>>): Prisma__EventAttachmentClient<$Result.GetResult<Prisma.$EventAttachmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EventAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAttachmentCountArgs} args - Arguments to filter EventAttachments to count.
+     * @example
+     * // Count the number of EventAttachments
+     * const count = await prisma.eventAttachment.count({
+     *   where: {
+     *     // ... the filter for the EventAttachments we want to count
+     *   }
+     * })
+    **/
+    count<T extends EventAttachmentCountArgs>(
+      args?: Subset<T, EventAttachmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EventAttachmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EventAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAttachmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EventAttachmentAggregateArgs>(args: Subset<T, EventAttachmentAggregateArgs>): Prisma.PrismaPromise<GetEventAttachmentAggregateType<T>>
+
+    /**
+     * Group by EventAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventAttachmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EventAttachmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EventAttachmentGroupByArgs['orderBy'] }
+        : { orderBy?: EventAttachmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EventAttachmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEventAttachmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EventAttachment model
+   */
+  readonly fields: EventAttachmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EventAttachment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EventAttachmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    event<T extends CalendarEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CalendarEventDefaultArgs<ExtArgs>>): Prisma__CalendarEventClient<$Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EventAttachment model
+   */
+  interface EventAttachmentFieldRefs {
+    readonly id: FieldRef<"EventAttachment", 'String'>
+    readonly eventId: FieldRef<"EventAttachment", 'String'>
+    readonly name: FieldRef<"EventAttachment", 'String'>
+    readonly type: FieldRef<"EventAttachment", 'String'>
+    readonly url: FieldRef<"EventAttachment", 'String'>
+    readonly size: FieldRef<"EventAttachment", 'Int'>
+    readonly createdAt: FieldRef<"EventAttachment", 'DateTime'>
+    readonly updatedAt: FieldRef<"EventAttachment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EventAttachment findUnique
+   */
+  export type EventAttachmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which EventAttachment to fetch.
+     */
+    where: EventAttachmentWhereUniqueInput
+  }
+
+  /**
+   * EventAttachment findUniqueOrThrow
+   */
+  export type EventAttachmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which EventAttachment to fetch.
+     */
+    where: EventAttachmentWhereUniqueInput
+  }
+
+  /**
+   * EventAttachment findFirst
+   */
+  export type EventAttachmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which EventAttachment to fetch.
+     */
+    where?: EventAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventAttachments to fetch.
+     */
+    orderBy?: EventAttachmentOrderByWithRelationInput | EventAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EventAttachments.
+     */
+    cursor?: EventAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EventAttachments.
+     */
+    distinct?: EventAttachmentScalarFieldEnum | EventAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * EventAttachment findFirstOrThrow
+   */
+  export type EventAttachmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which EventAttachment to fetch.
+     */
+    where?: EventAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventAttachments to fetch.
+     */
+    orderBy?: EventAttachmentOrderByWithRelationInput | EventAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EventAttachments.
+     */
+    cursor?: EventAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EventAttachments.
+     */
+    distinct?: EventAttachmentScalarFieldEnum | EventAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * EventAttachment findMany
+   */
+  export type EventAttachmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which EventAttachments to fetch.
+     */
+    where?: EventAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventAttachments to fetch.
+     */
+    orderBy?: EventAttachmentOrderByWithRelationInput | EventAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EventAttachments.
+     */
+    cursor?: EventAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventAttachments.
+     */
+    skip?: number
+    distinct?: EventAttachmentScalarFieldEnum | EventAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * EventAttachment create
+   */
+  export type EventAttachmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EventAttachment.
+     */
+    data: XOR<EventAttachmentCreateInput, EventAttachmentUncheckedCreateInput>
+  }
+
+  /**
+   * EventAttachment createMany
+   */
+  export type EventAttachmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EventAttachments.
+     */
+    data: EventAttachmentCreateManyInput | EventAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EventAttachment createManyAndReturn
+   */
+  export type EventAttachmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many EventAttachments.
+     */
+    data: EventAttachmentCreateManyInput | EventAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EventAttachment update
+   */
+  export type EventAttachmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EventAttachment.
+     */
+    data: XOR<EventAttachmentUpdateInput, EventAttachmentUncheckedUpdateInput>
+    /**
+     * Choose, which EventAttachment to update.
+     */
+    where: EventAttachmentWhereUniqueInput
+  }
+
+  /**
+   * EventAttachment updateMany
+   */
+  export type EventAttachmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EventAttachments.
+     */
+    data: XOR<EventAttachmentUpdateManyMutationInput, EventAttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which EventAttachments to update
+     */
+    where?: EventAttachmentWhereInput
+    /**
+     * Limit how many EventAttachments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EventAttachment updateManyAndReturn
+   */
+  export type EventAttachmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to update EventAttachments.
+     */
+    data: XOR<EventAttachmentUpdateManyMutationInput, EventAttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which EventAttachments to update
+     */
+    where?: EventAttachmentWhereInput
+    /**
+     * Limit how many EventAttachments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EventAttachment upsert
+   */
+  export type EventAttachmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EventAttachment to update in case it exists.
+     */
+    where: EventAttachmentWhereUniqueInput
+    /**
+     * In case the EventAttachment found by the `where` argument doesn't exist, create a new EventAttachment with this data.
+     */
+    create: XOR<EventAttachmentCreateInput, EventAttachmentUncheckedCreateInput>
+    /**
+     * In case the EventAttachment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EventAttachmentUpdateInput, EventAttachmentUncheckedUpdateInput>
+  }
+
+  /**
+   * EventAttachment delete
+   */
+  export type EventAttachmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter which EventAttachment to delete.
+     */
+    where: EventAttachmentWhereUniqueInput
+  }
+
+  /**
+   * EventAttachment deleteMany
+   */
+  export type EventAttachmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EventAttachments to delete
+     */
+    where?: EventAttachmentWhereInput
+    /**
+     * Limit how many EventAttachments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EventAttachment without action
+   */
+  export type EventAttachmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventAttachment
+     */
+    select?: EventAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventAttachment
+     */
+    omit?: EventAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventAttachmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -4431,6 +6995,40 @@ export namespace Prisma {
   };
 
   export type GoalScalarFieldEnum = (typeof GoalScalarFieldEnum)[keyof typeof GoalScalarFieldEnum]
+
+
+  export const CalendarEventScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    title: 'title',
+    description: 'description',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    allDay: 'allDay',
+    location: 'location',
+    color: 'color',
+    isRecurring: 'isRecurring',
+    recurrenceRule: 'recurrenceRule',
+    reminderBefore: 'reminderBefore',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
+
+
+  export const EventAttachmentScalarFieldEnum: {
+    id: 'id',
+    eventId: 'eventId',
+    name: 'name',
+    type: 'type',
+    url: 'url',
+    size: 'size',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type EventAttachmentScalarFieldEnum = (typeof EventAttachmentScalarFieldEnum)[keyof typeof EventAttachmentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4770,6 +7368,180 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Goal"> | Date | string
   }
 
+  export type CalendarEventWhereInput = {
+    AND?: CalendarEventWhereInput | CalendarEventWhereInput[]
+    OR?: CalendarEventWhereInput[]
+    NOT?: CalendarEventWhereInput | CalendarEventWhereInput[]
+    id?: StringFilter<"CalendarEvent"> | string
+    userId?: StringFilter<"CalendarEvent"> | string
+    title?: StringFilter<"CalendarEvent"> | string
+    description?: StringNullableFilter<"CalendarEvent"> | string | null
+    startDate?: DateTimeFilter<"CalendarEvent"> | Date | string
+    endDate?: DateTimeFilter<"CalendarEvent"> | Date | string
+    allDay?: BoolFilter<"CalendarEvent"> | boolean
+    location?: StringNullableFilter<"CalendarEvent"> | string | null
+    color?: StringNullableFilter<"CalendarEvent"> | string | null
+    isRecurring?: BoolFilter<"CalendarEvent"> | boolean
+    recurrenceRule?: StringNullableFilter<"CalendarEvent"> | string | null
+    reminderBefore?: IntNullableFilter<"CalendarEvent"> | number | null
+    createdAt?: DateTimeFilter<"CalendarEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"CalendarEvent"> | Date | string
+    attachments?: EventAttachmentListRelationFilter
+  }
+
+  export type CalendarEventOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrderInput | SortOrder
+    color?: SortOrderInput | SortOrder
+    isRecurring?: SortOrder
+    recurrenceRule?: SortOrderInput | SortOrder
+    reminderBefore?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    attachments?: EventAttachmentOrderByRelationAggregateInput
+  }
+
+  export type CalendarEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CalendarEventWhereInput | CalendarEventWhereInput[]
+    OR?: CalendarEventWhereInput[]
+    NOT?: CalendarEventWhereInput | CalendarEventWhereInput[]
+    userId?: StringFilter<"CalendarEvent"> | string
+    title?: StringFilter<"CalendarEvent"> | string
+    description?: StringNullableFilter<"CalendarEvent"> | string | null
+    startDate?: DateTimeFilter<"CalendarEvent"> | Date | string
+    endDate?: DateTimeFilter<"CalendarEvent"> | Date | string
+    allDay?: BoolFilter<"CalendarEvent"> | boolean
+    location?: StringNullableFilter<"CalendarEvent"> | string | null
+    color?: StringNullableFilter<"CalendarEvent"> | string | null
+    isRecurring?: BoolFilter<"CalendarEvent"> | boolean
+    recurrenceRule?: StringNullableFilter<"CalendarEvent"> | string | null
+    reminderBefore?: IntNullableFilter<"CalendarEvent"> | number | null
+    createdAt?: DateTimeFilter<"CalendarEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"CalendarEvent"> | Date | string
+    attachments?: EventAttachmentListRelationFilter
+  }, "id">
+
+  export type CalendarEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrderInput | SortOrder
+    color?: SortOrderInput | SortOrder
+    isRecurring?: SortOrder
+    recurrenceRule?: SortOrderInput | SortOrder
+    reminderBefore?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CalendarEventCountOrderByAggregateInput
+    _avg?: CalendarEventAvgOrderByAggregateInput
+    _max?: CalendarEventMaxOrderByAggregateInput
+    _min?: CalendarEventMinOrderByAggregateInput
+    _sum?: CalendarEventSumOrderByAggregateInput
+  }
+
+  export type CalendarEventScalarWhereWithAggregatesInput = {
+    AND?: CalendarEventScalarWhereWithAggregatesInput | CalendarEventScalarWhereWithAggregatesInput[]
+    OR?: CalendarEventScalarWhereWithAggregatesInput[]
+    NOT?: CalendarEventScalarWhereWithAggregatesInput | CalendarEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CalendarEvent"> | string
+    userId?: StringWithAggregatesFilter<"CalendarEvent"> | string
+    title?: StringWithAggregatesFilter<"CalendarEvent"> | string
+    description?: StringNullableWithAggregatesFilter<"CalendarEvent"> | string | null
+    startDate?: DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
+    endDate?: DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
+    allDay?: BoolWithAggregatesFilter<"CalendarEvent"> | boolean
+    location?: StringNullableWithAggregatesFilter<"CalendarEvent"> | string | null
+    color?: StringNullableWithAggregatesFilter<"CalendarEvent"> | string | null
+    isRecurring?: BoolWithAggregatesFilter<"CalendarEvent"> | boolean
+    recurrenceRule?: StringNullableWithAggregatesFilter<"CalendarEvent"> | string | null
+    reminderBefore?: IntNullableWithAggregatesFilter<"CalendarEvent"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
+  }
+
+  export type EventAttachmentWhereInput = {
+    AND?: EventAttachmentWhereInput | EventAttachmentWhereInput[]
+    OR?: EventAttachmentWhereInput[]
+    NOT?: EventAttachmentWhereInput | EventAttachmentWhereInput[]
+    id?: StringFilter<"EventAttachment"> | string
+    eventId?: StringFilter<"EventAttachment"> | string
+    name?: StringFilter<"EventAttachment"> | string
+    type?: StringFilter<"EventAttachment"> | string
+    url?: StringFilter<"EventAttachment"> | string
+    size?: IntFilter<"EventAttachment"> | number
+    createdAt?: DateTimeFilter<"EventAttachment"> | Date | string
+    updatedAt?: DateTimeFilter<"EventAttachment"> | Date | string
+    event?: XOR<CalendarEventScalarRelationFilter, CalendarEventWhereInput>
+  }
+
+  export type EventAttachmentOrderByWithRelationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    event?: CalendarEventOrderByWithRelationInput
+  }
+
+  export type EventAttachmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EventAttachmentWhereInput | EventAttachmentWhereInput[]
+    OR?: EventAttachmentWhereInput[]
+    NOT?: EventAttachmentWhereInput | EventAttachmentWhereInput[]
+    eventId?: StringFilter<"EventAttachment"> | string
+    name?: StringFilter<"EventAttachment"> | string
+    type?: StringFilter<"EventAttachment"> | string
+    url?: StringFilter<"EventAttachment"> | string
+    size?: IntFilter<"EventAttachment"> | number
+    createdAt?: DateTimeFilter<"EventAttachment"> | Date | string
+    updatedAt?: DateTimeFilter<"EventAttachment"> | Date | string
+    event?: XOR<CalendarEventScalarRelationFilter, CalendarEventWhereInput>
+  }, "id">
+
+  export type EventAttachmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: EventAttachmentCountOrderByAggregateInput
+    _avg?: EventAttachmentAvgOrderByAggregateInput
+    _max?: EventAttachmentMaxOrderByAggregateInput
+    _min?: EventAttachmentMinOrderByAggregateInput
+    _sum?: EventAttachmentSumOrderByAggregateInput
+  }
+
+  export type EventAttachmentScalarWhereWithAggregatesInput = {
+    AND?: EventAttachmentScalarWhereWithAggregatesInput | EventAttachmentScalarWhereWithAggregatesInput[]
+    OR?: EventAttachmentScalarWhereWithAggregatesInput[]
+    NOT?: EventAttachmentScalarWhereWithAggregatesInput | EventAttachmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"EventAttachment"> | string
+    eventId?: StringWithAggregatesFilter<"EventAttachment"> | string
+    name?: StringWithAggregatesFilter<"EventAttachment"> | string
+    type?: StringWithAggregatesFilter<"EventAttachment"> | string
+    url?: StringWithAggregatesFilter<"EventAttachment"> | string
+    size?: IntWithAggregatesFilter<"EventAttachment"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"EventAttachment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EventAttachment"> | Date | string
+  }
+
   export type FitbitActivityCreateInput = {
     id?: string
     date: Date | string
@@ -5046,6 +7818,205 @@ export namespace Prisma {
     completed?: BoolFieldUpdateOperationsInput | boolean
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CalendarEventCreateInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    allDay?: boolean
+    location?: string | null
+    color?: string | null
+    isRecurring?: boolean
+    recurrenceRule?: string | null
+    reminderBefore?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attachments?: EventAttachmentCreateNestedManyWithoutEventInput
+  }
+
+  export type CalendarEventUncheckedCreateInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    allDay?: boolean
+    location?: string | null
+    color?: string | null
+    isRecurring?: boolean
+    recurrenceRule?: string | null
+    reminderBefore?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attachments?: EventAttachmentUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type CalendarEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    reminderBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: EventAttachmentUpdateManyWithoutEventNestedInput
+  }
+
+  export type CalendarEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    reminderBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: EventAttachmentUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type CalendarEventCreateManyInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    allDay?: boolean
+    location?: string | null
+    color?: string | null
+    isRecurring?: boolean
+    recurrenceRule?: string | null
+    reminderBefore?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CalendarEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    reminderBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CalendarEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    reminderBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventAttachmentCreateInput = {
+    id?: string
+    name: string
+    type: string
+    url: string
+    size: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: CalendarEventCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type EventAttachmentUncheckedCreateInput = {
+    id?: string
+    eventId: string
+    name: string
+    type: string
+    url: string
+    size: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventAttachmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: CalendarEventUpdateOneRequiredWithoutAttachmentsNestedInput
+  }
+
+  export type EventAttachmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventAttachmentCreateManyInput = {
+    id?: string
+    eventId: string
+    name: string
+    type: string
+    url: string
+    size: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventAttachmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventAttachmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5448,6 +8419,121 @@ export namespace Prisma {
     progress?: SortOrder
   }
 
+  export type EventAttachmentListRelationFilter = {
+    every?: EventAttachmentWhereInput
+    some?: EventAttachmentWhereInput
+    none?: EventAttachmentWhereInput
+  }
+
+  export type EventAttachmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CalendarEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrder
+    color?: SortOrder
+    isRecurring?: SortOrder
+    recurrenceRule?: SortOrder
+    reminderBefore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CalendarEventAvgOrderByAggregateInput = {
+    reminderBefore?: SortOrder
+  }
+
+  export type CalendarEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrder
+    color?: SortOrder
+    isRecurring?: SortOrder
+    recurrenceRule?: SortOrder
+    reminderBefore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CalendarEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrder
+    color?: SortOrder
+    isRecurring?: SortOrder
+    recurrenceRule?: SortOrder
+    reminderBefore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CalendarEventSumOrderByAggregateInput = {
+    reminderBefore?: SortOrder
+  }
+
+  export type CalendarEventScalarRelationFilter = {
+    is?: CalendarEventWhereInput
+    isNot?: CalendarEventWhereInput
+  }
+
+  export type EventAttachmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EventAttachmentAvgOrderByAggregateInput = {
+    size?: SortOrder
+  }
+
+  export type EventAttachmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EventAttachmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EventAttachmentSumOrderByAggregateInput = {
+    size?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -5498,6 +8584,62 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type EventAttachmentCreateNestedManyWithoutEventInput = {
+    create?: XOR<EventAttachmentCreateWithoutEventInput, EventAttachmentUncheckedCreateWithoutEventInput> | EventAttachmentCreateWithoutEventInput[] | EventAttachmentUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventAttachmentCreateOrConnectWithoutEventInput | EventAttachmentCreateOrConnectWithoutEventInput[]
+    createMany?: EventAttachmentCreateManyEventInputEnvelope
+    connect?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+  }
+
+  export type EventAttachmentUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<EventAttachmentCreateWithoutEventInput, EventAttachmentUncheckedCreateWithoutEventInput> | EventAttachmentCreateWithoutEventInput[] | EventAttachmentUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventAttachmentCreateOrConnectWithoutEventInput | EventAttachmentCreateOrConnectWithoutEventInput[]
+    createMany?: EventAttachmentCreateManyEventInputEnvelope
+    connect?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+  }
+
+  export type EventAttachmentUpdateManyWithoutEventNestedInput = {
+    create?: XOR<EventAttachmentCreateWithoutEventInput, EventAttachmentUncheckedCreateWithoutEventInput> | EventAttachmentCreateWithoutEventInput[] | EventAttachmentUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventAttachmentCreateOrConnectWithoutEventInput | EventAttachmentCreateOrConnectWithoutEventInput[]
+    upsert?: EventAttachmentUpsertWithWhereUniqueWithoutEventInput | EventAttachmentUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: EventAttachmentCreateManyEventInputEnvelope
+    set?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    disconnect?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    delete?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    connect?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    update?: EventAttachmentUpdateWithWhereUniqueWithoutEventInput | EventAttachmentUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: EventAttachmentUpdateManyWithWhereWithoutEventInput | EventAttachmentUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: EventAttachmentScalarWhereInput | EventAttachmentScalarWhereInput[]
+  }
+
+  export type EventAttachmentUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<EventAttachmentCreateWithoutEventInput, EventAttachmentUncheckedCreateWithoutEventInput> | EventAttachmentCreateWithoutEventInput[] | EventAttachmentUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventAttachmentCreateOrConnectWithoutEventInput | EventAttachmentCreateOrConnectWithoutEventInput[]
+    upsert?: EventAttachmentUpsertWithWhereUniqueWithoutEventInput | EventAttachmentUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: EventAttachmentCreateManyEventInputEnvelope
+    set?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    disconnect?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    delete?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    connect?: EventAttachmentWhereUniqueInput | EventAttachmentWhereUniqueInput[]
+    update?: EventAttachmentUpdateWithWhereUniqueWithoutEventInput | EventAttachmentUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: EventAttachmentUpdateManyWithWhereWithoutEventInput | EventAttachmentUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: EventAttachmentScalarWhereInput | EventAttachmentScalarWhereInput[]
+  }
+
+  export type CalendarEventCreateNestedOneWithoutAttachmentsInput = {
+    create?: XOR<CalendarEventCreateWithoutAttachmentsInput, CalendarEventUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: CalendarEventCreateOrConnectWithoutAttachmentsInput
+    connect?: CalendarEventWhereUniqueInput
+  }
+
+  export type CalendarEventUpdateOneRequiredWithoutAttachmentsNestedInput = {
+    create?: XOR<CalendarEventCreateWithoutAttachmentsInput, CalendarEventUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: CalendarEventCreateOrConnectWithoutAttachmentsInput
+    upsert?: CalendarEventUpsertWithoutAttachmentsInput
+    connect?: CalendarEventWhereUniqueInput
+    update?: XOR<XOR<CalendarEventUpdateToOneWithWhereWithoutAttachmentsInput, CalendarEventUpdateWithoutAttachmentsInput>, CalendarEventUncheckedUpdateWithoutAttachmentsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -5731,6 +8873,190 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EventAttachmentCreateWithoutEventInput = {
+    id?: string
+    name: string
+    type: string
+    url: string
+    size: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventAttachmentUncheckedCreateWithoutEventInput = {
+    id?: string
+    name: string
+    type: string
+    url: string
+    size: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventAttachmentCreateOrConnectWithoutEventInput = {
+    where: EventAttachmentWhereUniqueInput
+    create: XOR<EventAttachmentCreateWithoutEventInput, EventAttachmentUncheckedCreateWithoutEventInput>
+  }
+
+  export type EventAttachmentCreateManyEventInputEnvelope = {
+    data: EventAttachmentCreateManyEventInput | EventAttachmentCreateManyEventInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EventAttachmentUpsertWithWhereUniqueWithoutEventInput = {
+    where: EventAttachmentWhereUniqueInput
+    update: XOR<EventAttachmentUpdateWithoutEventInput, EventAttachmentUncheckedUpdateWithoutEventInput>
+    create: XOR<EventAttachmentCreateWithoutEventInput, EventAttachmentUncheckedCreateWithoutEventInput>
+  }
+
+  export type EventAttachmentUpdateWithWhereUniqueWithoutEventInput = {
+    where: EventAttachmentWhereUniqueInput
+    data: XOR<EventAttachmentUpdateWithoutEventInput, EventAttachmentUncheckedUpdateWithoutEventInput>
+  }
+
+  export type EventAttachmentUpdateManyWithWhereWithoutEventInput = {
+    where: EventAttachmentScalarWhereInput
+    data: XOR<EventAttachmentUpdateManyMutationInput, EventAttachmentUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type EventAttachmentScalarWhereInput = {
+    AND?: EventAttachmentScalarWhereInput | EventAttachmentScalarWhereInput[]
+    OR?: EventAttachmentScalarWhereInput[]
+    NOT?: EventAttachmentScalarWhereInput | EventAttachmentScalarWhereInput[]
+    id?: StringFilter<"EventAttachment"> | string
+    eventId?: StringFilter<"EventAttachment"> | string
+    name?: StringFilter<"EventAttachment"> | string
+    type?: StringFilter<"EventAttachment"> | string
+    url?: StringFilter<"EventAttachment"> | string
+    size?: IntFilter<"EventAttachment"> | number
+    createdAt?: DateTimeFilter<"EventAttachment"> | Date | string
+    updatedAt?: DateTimeFilter<"EventAttachment"> | Date | string
+  }
+
+  export type CalendarEventCreateWithoutAttachmentsInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    allDay?: boolean
+    location?: string | null
+    color?: string | null
+    isRecurring?: boolean
+    recurrenceRule?: string | null
+    reminderBefore?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CalendarEventUncheckedCreateWithoutAttachmentsInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    allDay?: boolean
+    location?: string | null
+    color?: string | null
+    isRecurring?: boolean
+    recurrenceRule?: string | null
+    reminderBefore?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CalendarEventCreateOrConnectWithoutAttachmentsInput = {
+    where: CalendarEventWhereUniqueInput
+    create: XOR<CalendarEventCreateWithoutAttachmentsInput, CalendarEventUncheckedCreateWithoutAttachmentsInput>
+  }
+
+  export type CalendarEventUpsertWithoutAttachmentsInput = {
+    update: XOR<CalendarEventUpdateWithoutAttachmentsInput, CalendarEventUncheckedUpdateWithoutAttachmentsInput>
+    create: XOR<CalendarEventCreateWithoutAttachmentsInput, CalendarEventUncheckedCreateWithoutAttachmentsInput>
+    where?: CalendarEventWhereInput
+  }
+
+  export type CalendarEventUpdateToOneWithWhereWithoutAttachmentsInput = {
+    where?: CalendarEventWhereInput
+    data: XOR<CalendarEventUpdateWithoutAttachmentsInput, CalendarEventUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type CalendarEventUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    reminderBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CalendarEventUncheckedUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    reminderBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventAttachmentCreateManyEventInput = {
+    id?: string
+    name: string
+    type: string
+    url: string
+    size: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventAttachmentUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventAttachmentUncheckedUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventAttachmentUncheckedUpdateManyWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

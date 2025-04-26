@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -73,80 +72,74 @@ export default function GoalForm({ onSuccess }: GoalFormProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Set New Goal</CardTitle>
-        <CardDescription>Create a new weekly or monthly goal</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Goal Title</Label>
-            <Input
-              id="title"
-              name="title"
-              placeholder="e.g., Weekly Distance"
-              required
-            />
-          </div>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="title">Goal Title</Label>
+        <Input
+          id="title"
+          name="title"
+          placeholder="e.g., Weekly Distance"
+          required
+        />
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="type">Goal Type</Label>
-            <Select name="type" required>
-              <SelectTrigger>
-                <SelectValue placeholder="Select goal type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="type">Goal Type</Label>
+        <Select name="type" required>
+          <SelectTrigger>
+            <SelectValue placeholder="Select goal type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="weekly">Weekly</SelectItem>
+            <SelectItem value="monthly">Monthly</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="target">Target</Label>
-              <Input
-                id="target"
-                name="target"
-                type="number"
-                step="0.1"
-                placeholder="e.g., 30"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="unit">Unit</Label>
-              <Input
-                id="unit"
-                name="unit"
-                placeholder="e.g., km"
-                required
-              />
-            </div>
-          </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="target">Target</Label>
+          <Input
+            id="target"
+            name="target"
+            type="number"
+            step="0.1"
+            placeholder="e.g., 30"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="unit">Unit</Label>
+          <Input
+            id="unit"
+            name="unit"
+            placeholder="e.g., km"
+            required
+          />
+        </div>
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="endDate">End Date</Label>
-            <Input
-              id="endDate"
-              name="endDate"
-              type="date"
-              required
-            />
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="endDate">End Date</Label>
+        <Input
+          id="endDate"
+          name="endDate"
+          type="date"
+          required
+        />
+      </div>
 
-          {error && (
-            <div className="text-red-500 text-sm mt-2">
-              {error}
-            </div>
-          )}
+      {error && (
+        <div className="text-red-500 text-sm">
+          {error}
+        </div>
+      )}
 
-          <Button type="submit" disabled={loading}>
-            {loading ? "Creating..." : "Create Goal"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+      <div className="flex justify-end">
+        <Button type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Create Goal"}
+        </Button>
+      </div>
+    </form>
   )
 }

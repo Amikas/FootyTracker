@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Trash2, Plus, Minus } from "lucide-react"
+import { CheckCircle2, Circle, Trash2, Plus, Minus, PlusCircle } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { useGoals } from "@/components/contexts/goals-context"
@@ -14,12 +14,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { toast } from "@/components/ui/use-toast"
+import GoalForm from "@/components/goal-form"
 
 export default function UpcomingGoals() {
   const { weeklyGoals, monthlyGoals, loading, deleteGoal, updateGoalProgress } = useGoals()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [goalToDelete, setGoalToDelete] = useState<{ id: string; type: 'weekly' | 'monthly' } | null>(null)
+  const [goalDialogOpen, setGoalDialogOpen] = useState(false)
 
   const calculateProgress = (progress: number, target: number) => {
     return (progress / target) * 100
@@ -92,9 +102,27 @@ export default function UpcomingGoals() {
   return (
     <>
       <Card className="col-span-3 md:col-span-1 h-full">
-        <CardHeader>
-          <CardTitle>Upcoming Goals</CardTitle>
-          <CardDescription>Track your progress</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div>
+            <CardTitle>Upcoming Goals</CardTitle>
+            <CardDescription>Track your progress</CardDescription>
+          </div>
+          <Dialog open={goalDialogOpen} onOpenChange={setGoalDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="icon" className="h-8 w-8">
+                <PlusCircle className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>Set New Goal</DialogTitle>
+                <DialogDescription>
+                  Create a new weekly or monthly goal to track your progress.
+                </DialogDescription>
+              </DialogHeader>
+              <GoalForm onSuccess={() => setGoalDialogOpen(false)} />
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

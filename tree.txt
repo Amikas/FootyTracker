@@ -1,6 +1,8 @@
 npx tree-node-cli -I "node_modules"
 
+
 FootyTracker
+├── DBsetup.md
 ├── LICENSE
 ├── README.md
 ├── app
@@ -8,6 +10,9 @@ FootyTracker
 │   │   ├── fitbit.ts
 │   │   └── weeklyfetch.ts
 │   ├── api
+│   │   ├── activities
+│   │   │   └── recent
+│   │   │       └── route.ts
 │   │   ├── auth
 │   │   │   ├── login
 │   │   │   │   └── route.ts
@@ -15,6 +20,12 @@ FootyTracker
 │   │   │   │   └── route.ts
 │   │   │   └── register
 │   │   │       └── route.ts
+│   │   ├── calendar
+│   │   │   ├── attachments
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── export
+│   │   │   └── route.ts
 │   │   ├── fitbit
 │   │   │   ├── callback
 │   │   │   │   └── route.js
@@ -26,30 +37,59 @@ FootyTracker
 │   │   │   │   └── route.ts
 │   │   │   └── sync
 │   │   │       └── route.ts
+│   │   ├── goals
+│   │   │   └── route.ts
 │   │   └── profile
 │   │       └── route.ts
+│   ├── calendar
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components
+│   │   └── Calendar
+│   │       ├── Calendar.tsx
+│   │       ├── DayView.tsx
+│   │       ├── MonthView.tsx
+│   │       └── WeekView.tsx
 │   ├── connect-fitbit
 │   │   └── page.tsx
 │   ├── connect-nike
 │   │   └── page.tsx
 │   ├── connect-strava
 │   │   └── page.tsx
+│   ├── contexts
+│   │   └── CalendarContext.tsx
+│   ├── favicon.ico
 │   ├── globals.css
 │   ├── layout.tsx
+│   ├── lib
+│   │   ├── auth.ts
+│   │   └── prisma.ts
 │   ├── login
 │   │   └── page.tsx
 │   ├── page.tsx
-│   └── profile
-│       └── page.tsx
+│   ├── profile
+│   │   └── page.tsx
+│   ├── providers.tsx
+│   ├── settings
+│   │   └── page.tsx
+│   ├── stats
+│   │   └── page.tsx
+│   └── types
+│       ├── calendar.ts
+│       └── ldrs.d.ts
 ├── components
 │   ├── activity-display.tsx
+│   ├── contexts
+│   │   └── goals-context.tsx
 │   ├── dashboard
 │   │   ├── dashboard-header.tsx
 │   │   ├── performance-overview.tsx
 │   │   ├── recent-activities.tsx
 │   │   ├── training-metrics.tsx
 │   │   └── upcoming-goals.tsx
+│   ├── export-button.tsx
 │   ├── fitbit-login.tsx
+│   ├── goal-form.tsx
 │   ├── theme-provider.tsx
 │   └── ui
 │       ├── accordion.tsx
@@ -96,6 +136,7 @@ FootyTracker
 │       ├── table.tsx
 │       ├── tabs.tsx
 │       ├── textarea.tsx
+│       ├── theme-toggle.tsx
 │       ├── toast.tsx
 │       ├── toaster.tsx
 │       ├── toggle-group.tsx
@@ -108,18 +149,46 @@ FootyTracker
 ├── hooks
 │   ├── use-mobile.tsx
 │   └── use-toast.ts
+├── jsconfig.json
 ├── lib
+│   ├── auth.ts
+│   ├── hooks
 │   ├── prisma.ts
 │   ├── sync-fitbit.ts
+│   ├── utils
 │   └── utils.ts
 ├── next-env.d.ts
 ├── next.config.mjs
 ├── next.config.ts
 ├── package-lock.json
 ├── package.json
-├── pnpm-lock.yaml
 ├── postcss.config.mjs
 ├── prisma
+│   ├── generated
+│   │   └── client
+│   │       ├── client.d.ts
+│   │       ├── client.js
+│   │       ├── default.d.ts
+│   │       ├── default.js
+│   │       ├── edge.d.ts
+│   │       ├── edge.js
+│   │       ├── index-browser.js
+│   │       ├── index.d.ts
+│   │       ├── index.js
+│   │       ├── package.json
+│   │       ├── query_engine-windows.dll.node
+│   │       ├── runtime
+│   │       │   ├── edge-esm.js
+│   │       │   ├── edge.js
+│   │       │   ├── index-browser.d.ts
+│   │       │   ├── index-browser.js
+│   │       │   ├── library.d.ts
+│   │       │   ├── library.js
+│   │       │   ├── react-native.js
+│   │       │   └── wasm.js
+│   │       ├── schema.prisma
+│   │       ├── wasm.d.ts
+│   │       └── wasm.js
 │   ├── migrations
 │   │   ├── 20250327164208_init
 │   │   │   └── migration.sql
@@ -137,19 +206,31 @@ FootyTracker
 │   │   │   └── migration.sql
 │   │   ├── 20250329191355_add_password_to_user
 │   │   │   └── migration.sql
+│   │   ├── 20250412173852_init_goal_model
+│   │   │   └── migration.sql
+│   │   ├── 20250417205201_add_goals
+│   │   │   └── migration.sql
+│   │   ├── 20250426215409_add_calendar_models
+│   │   │   └── migration.sql
 │   │   └── migration_lock.toml
 │   └── schema.prisma
 ├── public
+│   ├── file.svg
+│   ├── globe.svg
 │   ├── images
 │   │   ├── fitbit.png
 │   │   ├── nike.png
 │   │   └── strava.png
+│   ├── next.svg
 │   ├── placeholder-logo.png
 │   ├── placeholder-logo.svg
 │   ├── placeholder-user.jpg
 │   ├── placeholder.jpg
-│   └── placeholder.svg
-├── styles
+│   ├── placeholder.svg
+│   ├── vercel.svg
+│   └── window.svg
 ├── tailwind.config.ts
 ├── tree.txt
-└── tsconfig.json
+├── tsconfig.json
+└── types
+    └── react-pure-loading.d.ts

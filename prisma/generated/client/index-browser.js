@@ -157,6 +157,34 @@ exports.Prisma.GoalScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CalendarEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  allDay: 'allDay',
+  location: 'location',
+  color: 'color',
+  isRecurring: 'isRecurring',
+  recurrenceRule: 'recurrenceRule',
+  reminderBefore: 'reminderBefore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EventAttachmentScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  name: 'name',
+  type: 'type',
+  url: 'url',
+  size: 'size',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -176,7 +204,9 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   FitbitActivity: 'FitbitActivity',
   UserProfile: 'UserProfile',
-  Goal: 'Goal'
+  Goal: 'Goal',
+  CalendarEvent: 'CalendarEvent',
+  EventAttachment: 'EventAttachment'
 };
 
 /**
