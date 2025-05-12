@@ -1,6 +1,5 @@
 npx tree-node-cli -I "node_modules"
 
-
 FootyTracker
 ├── DBsetup.md
 ├── LICENSE
@@ -74,6 +73,11 @@ FootyTracker
 │   │   └── page.tsx
 │   ├── stats
 │   │   └── page.tsx
+│   ├── training
+│   │   ├── page.tsx
+│   │   ├── service.ts
+│   │   ├── types.ts
+│   │   └── useTraining.ts
 │   └── types
 │       ├── calendar.ts
 │       └── ldrs.d.ts
@@ -152,16 +156,15 @@ FootyTracker
 ├── jsconfig.json
 ├── lib
 │   ├── auth.ts
-│   ├── hooks
 │   ├── prisma.ts
 │   ├── sync-fitbit.ts
-│   ├── utils
 │   └── utils.ts
 ├── next-env.d.ts
 ├── next.config.mjs
 ├── next.config.ts
 ├── package-lock.json
 ├── package.json
+├── pnpm-lock.yaml
 ├── postcss.config.mjs
 ├── prisma
 │   ├── generated

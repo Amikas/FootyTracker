@@ -8,21 +8,21 @@ datasource db {
 }
 
 model FitbitActivity {
-  id        String   @id @default(cuid())
-  date      DateTime @unique
-  duration  Int
-  calories  Int
-  steps     Int
-  distance  Float
-  lastUpdated DateTime?  @default(now())
-  createdAt DateTime @default(now())
-  manual Boolean @default(false)
+  id          String    @id @default(cuid())
+  date        DateTime  @unique
+  duration    Int
+  calories    Int
+  steps       Int
+  distance    Float
+  lastUpdated DateTime? @default(now())
+  createdAt   DateTime  @default(now())
+  manual      Boolean   @default(false)
 }
 
 model UserProfile {
   id        String   @id @default(cuid())
   username  String   @unique
-  password  String   
+  password  String
   name      String
   age       Int?
   weightKg  Float?
@@ -33,51 +33,105 @@ model UserProfile {
 }
 
 model Goal {
-  id          String   @id @default(cuid())
-  userId      String
-  title       String
-  type        String   // 'weekly' or 'monthly'
-  target      Float
-  unit        String
-  progress    Float    @default(0)
-  completed   Boolean  @default(false)
-  startDate   DateTime @default(now())
-  endDate     DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  type      String // 'weekly' or 'monthly'
+  target    Float
+  unit      String
+  progress  Float    @default(0)
+  completed Boolean  @default(false)
+  startDate DateTime @default(now())
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model CalendarEvent {
-  id          String   @id @default(cuid())
+model TrainingPlan {
+  id          String          @id @default(cuid())
   userId      String
   title       String
   description String?
-  startDate   DateTime
-  endDate     DateTime
-  allDay      Boolean  @default(false)
-  location    String?
-  color       String?  // For event color coding
-  isRecurring Boolean  @default(false)
+  duration    Int // Duration in minutes
+  difficulty  String
+  exercises   Json[] // Array of exercise configurations
+  events      CalendarEvent[] // Relation to calendar events
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([userId])
+}
+
+model CalendarEvent {
+  id             String            @id @default(cuid())
+  userId         String
+  title          String
+  description    String?
+  startDate      DateTime
+  endDate        DateTime
+  allDay         Boolean           @default(false)
+  location       String?
+  color          String? // For event color coding
+  isRecurring    Boolean           @default(false)
   recurrenceRule String? // RRULE format for recurring events
   reminderBefore Int? // Minutes before event to send reminder
-  attachments EventAttachment[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  trainingPlanId String? // Reference to attached training plan
+  trainingPlan   TrainingPlan?     @relation(fields: [trainingPlanId], references: [id])
+  attachments    EventAttachment[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
 
   @@index([userId])
   @@index([startDate, endDate])
+  @@index([trainingPlanId])
 }
 
 model EventAttachment {
-  id          String   @id @default(cuid())
-  eventId     String
-  event       CalendarEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  name        String
-  type        String   // 'document', 'image', 'video', etc.
-  url         String   // URL to the stored file
-  size        Int      // File size in bytes
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String        @id @default(cuid())
+  eventId   String
+  event     CalendarEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name      String
+  type      String // 'document', 'image', 'video', etc.
+  url       String // URL to the stored file
+  size      Int // File size in bytes
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   @@index([eventId])
+}
+
+model Exercise {
+  id          String  @id @default(cuid())
+  name        String
+  category    String
+  description String?
+
+  sets TrainingSet[]
+}
+
+model TrainingSession {
+  id        String        @id @default(cuid())
+  userId    String
+  date      DateTime
+  title     String?
+  notes     String?
+  sets      TrainingSet[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model TrainingSet {
+  id          String @id @default(cuid())
+  sessionId   String
+  exerciseId  String
+  repetitions Int
+  weight      Float?
+  duration    Int? // seconds
+  distance    Float? // meters
+
+  session  TrainingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise Exercise        @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

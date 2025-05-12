@@ -35,21 +35,37 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <main className="flex min-h-screen flex-col">
+    <>
       <DashboardHeader />
-      <div className="container mx-auto px-4 py-6">
-        <h1 className="text-3xl font-bold mb-6">Training Dashboard</h1>
-        <GoalsProvider>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <PerformanceOverview />
-            <TrainingMetrics />
-            <UpcomingGoals />
-          </div>
-          <div className="mt-6">
-            <RecentActivities />
-          </div>
-        </GoalsProvider>
-      </div>
-    </main>
+      <main 
+        id="main-content" 
+        className="flex min-h-screen flex-col"
+        tabIndex={-1} // Makes the main content focusable for the skip link
+      >
+        <div className="container mx-auto px-4 py-6">
+          <h1 className="text-3xl font-bold mb-6" tabIndex={-1}>
+            Training Dashboard
+          </h1>
+          <GoalsProvider>
+            <div 
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6"
+              role="region"
+              aria-label="Performance Overview"
+            >
+              <PerformanceOverview />
+              <TrainingMetrics />
+              <UpcomingGoals />
+            </div>
+            <div 
+              className="mt-6"
+              role="region"
+              aria-label="Recent Activities"
+            >
+              <RecentActivities />
+            </div>
+          </GoalsProvider>
+        </div>
+      </main>
+    </>
   )
 }

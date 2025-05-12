@@ -17,8 +17,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { TrainingSet } from "./types";
 import { useTraining } from "./useTraining";
+import React from "react";
+import { useSession } from "next-auth/react";
+import { Home } from 'lucide-react';
+import Link from 'next/link';
 
 export default function TrainingPage() {
+  // First, declare all authentication and session-related hooks
+  const { data: session, status } = useSession();
+
+  // Then, declare all state hooks
   const [date, setDate] = useState<Date>(new Date());
   const [currentExercise, setCurrentExercise] = useState<string>("");
   const [repetitions, setRepetitions] = useState<number>(0);
@@ -28,33 +36,69 @@ export default function TrainingPage() {
   const [sessionNotes, setSessionNotes] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
 
-  const { 
-    exercises, 
-    sessions, 
-    loading, 
-    error, 
+  // After authentication check, declare custom hooks
+  const {
+    exercises,
+    sessions,
+    loading,
+    error,
     createSession,
     getProgress,
-    getExerciseName 
+    getExerciseName
   } = useTraining();
+
+  // Early returns for loading and authentication
+  if (status === "loading") {
+    return (
+      <div className="container mx-auto py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">FootyTracker Training</h1>
+          <Link href="/">
+            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+              <Home className="h-5 w-5" />
+              Return to Home
+            </Button>
+          </Link>
+        </div>
+        <p>Loading session...</p>
+      </div>
+    );
+  }
+
+  if (!session?.user?.id) {
+    return (
+      <div className="container mx-auto py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">FootyTracker Training</h1>
+          <Link href="/">
+            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+              <Home className="h-5 w-5" />
+              Return to Home
+            </Button>
+          </Link>
+        </div>
+        <p>You must be logged in.</p>
+      </div>
+    );
+  }
 
   const progressData = getProgress();
 
   const addExerciseToSession = () => {
     if (!currentExercise || repetitions <= 0) return;
-    
+
     setCurrentSession([
       ...currentSession,
       { exerciseId: currentExercise, repetitions }
     ]);
-    
+
     setCurrentExercise("");
     setRepetitions(0);
   };
 
   const saveSession = async () => {
     if (currentSession.length === 0) return;
-    
+
     try {
       setIsSaving(true);
       await createSession(
@@ -63,7 +107,7 @@ export default function TrainingPage() {
         sessionTitle || `Training on ${format(date, "MMM d")}`,
         sessionNotes
       );
-      
+
       setCurrentSession([]);
       setSessionTitle("");
       setSessionNotes("");
@@ -77,7 +121,7 @@ export default function TrainingPage() {
 
   const renderExerciseCategories = () => {
     const categories = [...new Set(exercises.map(ex => ex.category))];
-    
+
     return categories.map(category => (
       <div key={category} className="mb-4">
         <h3 className="text-sm font-medium text-muted-foreground mb-2">{category}</h3>
@@ -98,7 +142,15 @@ export default function TrainingPage() {
   if (loading) {
     return (
       <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold mb-6">FootyTracker Training</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">FootyTracker Training</h1>
+          <Link href="/">
+            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+              <Home className="h-5 w-5" />
+              Return to Home
+            </Button>
+          </Link>
+        </div>
         <div className="space-y-6">
           <Skeleton className="h-12 w-full max-w-md" />
           <div className="grid md:grid-cols-2 gap-6">
@@ -114,7 +166,15 @@ export default function TrainingPage() {
   if (error) {
     return (
       <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold mb-6">FootyTracker Training</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">FootyTracker Training</h1>
+          <Link href="/">
+            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+              <Home className="h-5 w-5" />
+              Return to Home
+            </Button>
+          </Link>
+        </div>
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
@@ -124,7 +184,15 @@ export default function TrainingPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">FootyTracker Training</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">FootyTracker Training</h1>
+        <Link href="/">
+          <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+            <Home className="h-5 w-5" />
+            Return to Home
+          </Button>
+        </Link>
+      </div>
 
       <Tabs defaultValue="new" value={activeTab} onValueChange={setActiveTab} className="mb-6">
         <TabsList className="grid grid-cols-3 w-full max-w-md mb-6">
@@ -151,16 +219,21 @@ export default function TrainingPage() {
                       onChange={(e) => setSessionTitle(e.target.value)}
                     />
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="date">Training Date</Label>
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={(date) => date && setDate(date)}
-                      className="rounded-md border"
-                    />
+
+                  <div className="space-y-2 ">
+                    <Label htmlFor="date" className="block text-center mb-10">Training Date</Label>
+                    <div className="flex justify-center">
+                      <div className="scale-110">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={(day: Date | undefined) => day && setDate(day)}
+                          className="rounded-md border"
+                        />
+                      </div>
+                    </div>
                   </div>
+
                 </div>
 
                 <div className="space-y-4">
@@ -187,8 +260,8 @@ export default function TrainingPage() {
                       />
                     </div>
                   </div>
-                  <Button 
-                    onClick={addExerciseToSession} 
+                  <Button
+                    onClick={addExerciseToSession}
                     disabled={!currentExercise || repetitions <= 0}
                   >
                     Add Exercise
@@ -207,13 +280,13 @@ export default function TrainingPage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Current Session</CardTitle>
                 <CardDescription>
-                  {currentSession.length === 0 
-                    ? "No exercises added yet" 
+                  {currentSession.length === 0
+                    ? "No exercises added yet"
                     : `${currentSession.length} exercise${currentSession.length > 1 ? 's' : ''} added`}
                 </CardDescription>
               </CardHeader>
@@ -226,8 +299,8 @@ export default function TrainingPage() {
                   <ScrollArea className="h-72">
                     <div className="space-y-4">
                       {currentSession.map((set, index) => (
-                        <div 
-                          key={index} 
+                        <div
+                          key={index}
                           className="flex items-center justify-between border-b pb-2"
                         >
                           <div>
@@ -254,8 +327,8 @@ export default function TrainingPage() {
                 )}
               </CardContent>
               <CardFooter>
-                <Button 
-                  className="w-full" 
+                <Button
+                  className="w-full"
                   onClick={saveSession}
                   disabled={currentSession.length === 0 || isSaving}
                 >
@@ -276,8 +349,8 @@ export default function TrainingPage() {
               {sessions.length === 0 ? (
                 <div className="text-center py-12 border-2 border-dashed rounded-lg">
                   <p className="text-muted-foreground">No training sessions recorded yet</p>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="mt-4"
                     onClick={() => setActiveTab("new")}
                   >
@@ -289,36 +362,36 @@ export default function TrainingPage() {
                   {sessions
                     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                     .map((session) => (
-                    <Card key={session.id} className="bg-muted/40">
-                      <CardHeader className="pb-2">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <CardTitle className="text-lg">{session.title || format(new Date(session.date), "MMMM d, yyyy")}</CardTitle>
-                            <CardDescription>{format(new Date(session.date), "EEEE, MMMM d, yyyy")}</CardDescription>
-                          </div>
-                          <div className="bg-primary text-primary-foreground px-3 py-1 rounded-md text-sm">
-                            {session.sets.length} exercises
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {session.sets.map((set, idx) => (
-                            <div key={idx} className="flex justify-between items-center py-1 border-b border-border/50">
-                              <span>{getExerciseName(set.exerciseId)}</span>
-                              <span className="font-medium">{set.repetitions} reps</span>
+                      <Card key={session.id} className="bg-muted/40">
+                        <CardHeader className="pb-2">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <CardTitle className="text-lg">{session.title || format(new Date(session.date), "MMMM d, yyyy")}</CardTitle>
+                              <CardDescription>{format(new Date(session.date), "EEEE, MMMM d, yyyy")}</CardDescription>
                             </div>
-                          ))}
-                          
-                          {session.notes && (
-                            <div className="mt-4 pt-2 border-t">
-                              <p className="text-sm text-muted-foreground">{session.notes}</p>
+                            <div className="bg-primary text-primary-foreground px-3 py-1 rounded-md text-sm">
+                              {session.sets.length} exercises
                             </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            {session.sets.map((set, idx) => (
+                              <div key={idx} className="flex justify-between items-center py-1 border-b border-border/50">
+                                <span>{getExerciseName(set.exerciseId)}</span>
+                                <span className="font-medium">{set.repetitions} reps</span>
+                              </div>
+                            ))}
+
+                            {session.notes && (
+                              <div className="mt-4 pt-2 border-t">
+                                <p className="text-sm text-muted-foreground">{session.notes}</p>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                 </div>
               )}
             </CardContent>
@@ -338,8 +411,8 @@ export default function TrainingPage() {
                   <p className="text-sm text-muted-foreground mt-2">
                     Complete more training sessions to see your progress
                   </p>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="mt-4"
                     onClick={() => setActiveTab("new")}
                   >
@@ -363,7 +436,7 @@ export default function TrainingPage() {
                           const dateLabel = format(new Date(session.date), "MMM dd");
                           // Generate a consistent color based on the date string
                           const color = `hsl(${(dateLabel.charCodeAt(0) * 5) % 360}, 70%, 50%)`;
-                          
+
                           return (
                             <Line
                               key={dateLabel}
@@ -377,22 +450,22 @@ export default function TrainingPage() {
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                  
+
                   <div className="grid md:grid-cols-2 gap-6">
                     {progressData.map((exerciseData, index) => {
                       const exerciseName = exerciseData.exercise;
                       // Remove the exercise name key to get just the data points
                       const { exercise, ...dataPoints } = exerciseData;
                       const dataEntries = Object.entries(dataPoints);
-                      
+
                       if (dataEntries.length < 2) return null;
-                      
+
                       // Calculate improvement
                       const firstValue = parseInt(dataEntries[0][1] as string);
                       const lastValue = parseInt(dataEntries[dataEntries.length - 1][1] as string);
                       const improvement = lastValue - firstValue;
                       const percentageImprovement = ((lastValue - firstValue) / firstValue * 100).toFixed(1);
-                      
+
                       return (
                         <Card key={index} className="bg-muted/40">
                           <CardHeader className="pb-2">

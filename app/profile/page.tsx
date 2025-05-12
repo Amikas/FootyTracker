@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
+  const { data: session, status } = useSession();
+
   const [mode, setMode] = useState<"register" | "edit">("register");
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -20,32 +22,35 @@ export default function ProfilePage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const userId = session?.user?.id;
+
   useEffect(() => {
-    const storedId = localStorage.getItem("userId");
-    setUserId(storedId);
-    if (storedId) {
-      setMode("edit");
-      fetch(`/api/auth/profile?userId=${storedId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data) {
-            setFormData({
-              ...formData,
-              username: data.username || "",
-              name: data.name || "",
-              age: data.age?.toString() || "",
-              weightKg: data.weightKg?.toString() || "",
-              heightCm: data.heightCm?.toString() || "",
-              avatarUrl: data.avatarUrl || "",
-              password: "", // don't pre-fill password
-            });
-          }
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
+    if (status === "loading") return;
+
+    if (!userId) {
+      router.push("/login");
+      return;
     }
-  }, []);
+
+    setMode("edit");
+    fetch(`/api/auth/profile?userId=${userId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          setFormData({
+            ...formData,
+            username: data.username || "",
+            name: data.name || "",
+            age: data.age?.toString() || "",
+            weightKg: data.weightKg?.toString() || "",
+            heightCm: data.heightCm?.toString() || "",
+            avatarUrl: data.avatarUrl || "",
+            password: "", // never populate password field
+          });
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [userId, status]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,65 +61,45 @@ export default function ProfilePage() {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    if (!userId) return;
+
     const payload = {
       ...formData,
       age: formData.age ? parseInt(formData.age) : null,
       weightKg: formData.weightKg ? parseFloat(formData.weightKg) : null,
       heightCm: formData.heightCm ? parseFloat(formData.heightCm) : null,
-      userId: userId || undefined,
+      userId,
     };
 
-    const res = await fetch(
-      `/api/auth/${mode === "edit" ? "profile" : "register"}`,
-      {
-        method: mode === "edit" ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-    );
+    const res = await fetch(`/api/auth/profile`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
     if (res.ok) {
-      const data = await res.json();
-      if (mode === "register") {
-        localStorage.setItem("userId", data.userId);
-        router.push("/");
-      } else {
-        setSuccess("Profile updated!");
-      }
+      setSuccess("Profile updated!");
     } else {
       const err = await res.json();
       setError(err.message || "Something went wrong");
     }
   };
 
-  if (loading) return <div className="text-center mt-10">Loading...</div>;
+  if (status === "loading" || loading) return <div className="text-center mt-10">Loading...</div>;
 
   return (
     <div className="max-w-md mx-auto mt-12 p-6 border rounded-xl shadow">
-      <h1 className="text-2xl font-bold mb-4">
-        {mode === "edit" ? "Edit Your Profile" : "Create Account"}
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Edit Your Profile</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="username"
           placeholder="Username"
           required
-          disabled={mode === "edit"}
+          disabled
           value={formData.username}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
         />
-        {mode === "register" && (
-          <input
-            name="password"
-            placeholder="Password"
-            type="password"
-            required
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        )}
         <input
           name="name"
           placeholder="Full Name"
@@ -160,27 +145,15 @@ export default function ProfilePage() {
           type="submit"
           className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
         >
-          {mode === "edit" ? "Update Profile" : "Register"}
+          Update Profile
         </button>
         <button
           type="button"
           onClick={() => router.push("/")}
-          className="w-full flex items-center justify-center gap-2 text-white-800 border border-gray-300 py-2 rounded-lg shadow-sm hover:bg-gray-100 hover:text-black"
-
+          className="w-full flex items-center justify-center gap-2 text-gray-800 border border-gray-300 py-2 rounded-lg shadow-sm hover:bg-gray-100"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Back to Dashboard
         </button>

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 interface Goal {
   id: string
@@ -29,6 +30,7 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
   const [monthlyGoals, setMonthlyGoals] = useState<Goal[]>([])
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   const fetchGoals = async (userId: string) => {
     try {
@@ -51,17 +53,15 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
   }
 
   const refreshGoals = async () => {
-    const userId = localStorage.getItem("userId")
-    if (!userId) {
+    if (!session?.user?.id) {
       router.push("/login")
       return
     }
-    await fetchGoals(userId)
+    await fetchGoals(session.user.id)
   }
 
   const addGoal = async (newGoal: Omit<Goal, 'id' | 'progress' | 'completed'>) => {
-    const userId = localStorage.getItem("userId")
-    if (!userId) {
+    if (!session?.user?.id) {
       router.push("/login")
       return
     }
@@ -86,7 +86,7 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...newGoal, userId }),
+        body: JSON.stringify({ ...newGoal, userId: session.user.id }),
       })
 
       if (!response.ok) {
@@ -108,8 +108,7 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
   }
 
   const deleteGoal = async (id: string, type: 'weekly' | 'monthly') => {
-    const userId = localStorage.getItem("userId")
-    if (!userId) {
+    if (!session?.user?.id) {
       router.push("/login")
       return
     }
@@ -138,8 +137,7 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
   }
 
   const updateGoalProgress = async (id: string, progress: number, type: 'weekly' | 'monthly') => {
-    const userId = localStorage.getItem("userId")
-    if (!userId) {
+    if (!session?.user?.id) {
       router.push("/login")
       return
     }
@@ -181,13 +179,15 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId")
-    if (!userId) {
+    if (status === 'loading') return;
+    
+    if (!session?.user?.id) {
       router.push("/login")
       return
     }
-    fetchGoals(userId)
-  }, [router])
+    
+    fetchGoals(session.user.id)
+  }, [session, status, router])
 
   return (
     <GoalsContext.Provider value={{ 

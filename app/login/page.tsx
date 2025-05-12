@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 
 export default function LoginPage() {
@@ -17,24 +18,21 @@ export default function LoginPage() {
     e.preventDefault()
     setError('')
 
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+    const res = await signIn('credentials', {
+      username,
+      password,
+      redirect: false,
     })
 
-    if (res.ok) {
-      const data = await res.json()
-      localStorage.setItem('userId', data.userId)
+    if (res?.ok) {
       router.push('/')
     } else {
-      const err = await res.json()
-      setError(err.message || 'Login failed')
+      setError('Invalid username or password')
     }
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)] py-10">
+    <div className="flex items-center justify-center h-screen bg-black">
       <Card className="w-full max-w-md">
         <CardHeader>
           <h1 className="text-2xl font-bold text-center">Welcome Back</h1>
@@ -72,4 +70,5 @@ export default function LoginPage() {
       </Card>
     </div>
   )
+
 }
