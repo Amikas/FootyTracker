@@ -28,10 +28,18 @@ export default function Dashboard() {
     // Initial sync
     syncData()
 
-    // Set up interval for subsequent syncs
-    const interval = setInterval(syncData, 10 * 60 * 1000) // Every 10 minutes
+    // Sync data when the tab becomes visible
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        syncData()
+      }
+    }
 
-    return () => clearInterval(interval)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [])
 
   return (

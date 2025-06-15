@@ -65,10 +65,21 @@ export default function LoginPage() {
             <Button type="submit" className="w-full">
               Log In
             </Button>
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-400">
+                Don't have an account?{' '}
+                <button 
+                  type="button" 
+                  className="text-blue-500 hover:underline"
+                  onClick={() => router.push('/register')}
+                >
+                  Register here
+                </button>
+              </p>
+            </div>
           </form>
         </CardContent>
       </Card>
     </div>
   )
-
 }

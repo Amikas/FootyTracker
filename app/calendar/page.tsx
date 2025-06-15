@@ -36,6 +36,10 @@ import {
 } from '@/components/ui/select';
 import { formatISO } from 'date-fns';
 import Link from 'next/link';
+import { useCalendar } from '@/components/ui/customcalendar';
+import { useMemo } from 'react';
+import { cn } from '@/lib/utils';
+import { format, isSameDay, isSameMonth, isToday } from 'date-fns';
 
 // The color type from the custom calendar component
 type EventColor = CustomCalendarEvent['color'];
@@ -48,17 +52,70 @@ interface StoredEvent {
   endDate: string;
   color: NonNullable<EventColor>;
   userId?: string;
+  trainingPlan?: {
+    id?: string;
+    title: string;
+    description?: string;
+    duration: number;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    exercises: any[];
+  };
 }
 
+// Update the form state type at the top of the file
+interface FormState {
+  title: string;
+  start: string;
+  end: string;
+  color: NonNullable<EventColor>;
+  trainingPlan: {
+    id?: string;
+    title: string;
+    description: string;
+    duration: number;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    exercises: any[];
+  };
+}
+
+// Add this component for displaying training plan details
+const TrainingPlanDetails = ({ trainingPlan }: { trainingPlan: any }) => {
+  if (!trainingPlan) return null;
+
+  return (
+    <div className="mt-2 text-xs space-y-1">
+      <div className="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        <span className="font-medium">{trainingPlan.title}</span>
+      </div>
+      <div className="text-muted-foreground">
+        <div>Difficulty: {trainingPlan.difficulty}</div>
+        <div>Duration: {trainingPlan.duration} mins</div>
+      </div>
+    </div>
+  );
+};
+
+// Update the dialog content to show existing training plan details when editing
 export default function CalendarPage() {
   const [events, setEvents] = useState<StoredEvent[]>([]);
+  const [showTrainingPlan, setShowTrainingPlan] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<StoredEvent | null>(null);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormState>({
     title: '',
     start: formatISO(new Date()),
     end: formatISO(new Date()),
-    color: 'blue' as NonNullable<EventColor>,
+    color: 'blue',
+    trainingPlan: {
+      title: '',
+      description: '',
+      duration: 60,
+      difficulty: 'Medium',
+      exercises: []
+    }
   });
 
   // Load events from MongoDB on mount
@@ -74,6 +131,14 @@ export default function CalendarPage() {
           endDate: event.endDate,
           color: event.color || 'blue',
           userId: event.userId,
+          trainingPlan: event.trainingPlan ? {
+            id: event.trainingPlan.id,
+            title: event.trainingPlan.title,
+            description: event.trainingPlan.description || '',
+            duration: event.trainingPlan.duration,
+            difficulty: event.trainingPlan.difficulty,
+            exercises: event.trainingPlan.exercises || []
+          } : undefined
         }));
         setEvents(parsed);
       });
@@ -86,6 +151,14 @@ export default function CalendarPage() {
       startDate: formatISO(event.start),
       endDate: formatISO(event.end),
       color: event.color || 'blue',
+      trainingPlan: event.trainingPlan ? {
+        id: event.trainingPlan.id,
+        title: event.trainingPlan.title,
+        description: event.trainingPlan.description || '',
+        duration: event.trainingPlan.duration,
+        difficulty: event.trainingPlan.difficulty,
+        exercises: event.trainingPlan.exercises || []
+      } : undefined
     };
     setSelectedEvent(storedEvent);
     setForm({
@@ -93,6 +166,20 @@ export default function CalendarPage() {
       start: formatISO(event.start),
       end: formatISO(event.end),
       color: event.color || 'blue',
+      trainingPlan: event.trainingPlan ? {
+        id: event.trainingPlan.id,
+        title: event.trainingPlan.title,
+        description: event.trainingPlan.description || '',
+        duration: event.trainingPlan.duration,
+        difficulty: event.trainingPlan.difficulty,
+        exercises: event.trainingPlan.exercises || []
+      } : {
+        title: '',
+        description: '',
+        duration: 60,
+        difficulty: 'Medium',
+        exercises: []
+      }
     });
     setOpen(true);
   };
@@ -104,6 +191,13 @@ export default function CalendarPage() {
       start: formatISO(new Date()),
       end: formatISO(new Date()),
       color: 'blue',
+      trainingPlan: {
+        title: '',
+        description: '',
+        duration: 60,
+        difficulty: 'Medium',
+        exercises: []
+      }
     });
   };
 
@@ -114,11 +208,18 @@ export default function CalendarPage() {
       endDate: form.end,
       color: form.color,
       userId: 'anonymous', // Replace with real auth if needed
+      trainingPlan: form.trainingPlan.title ? {
+        title: form.trainingPlan.title,
+        description: form.trainingPlan.description,
+        duration: form.trainingPlan.duration,
+        difficulty: form.trainingPlan.difficulty,
+        exercises: form.trainingPlan.exercises
+      } : undefined
     };
 
     const method = selectedEvent ? 'PUT' : 'POST';
-    const url = selectedEvent 
-      ? `/api/calendar/${selectedEvent.id}` 
+    const url = selectedEvent
+      ? `/api/calendar/${selectedEvent.id}`
       : '/api/calendar';
 
     const res = await fetch(url, {
@@ -135,13 +236,14 @@ export default function CalendarPage() {
     const saved = await res.json();
 
     // Update local state
-    const newEvent: StoredEvent = {
+    const newEvent = {
       id: saved.id || selectedEvent?.id || uuidv4(),
       title: saved.title,
       startDate: saved.startDate,
       endDate: saved.endDate,
       color: saved.color || 'blue',
       userId: saved.userId,
+      trainingPlan: saved.trainingPlan
     };
 
     if (selectedEvent) {
@@ -191,8 +293,8 @@ export default function CalendarPage() {
           <Button variant="outline">Back to Home</Button>
         </Link>
       </div>
-      <Calendar 
-        events={calendarEvents} 
+      <Calendar
+        events={calendarEvents}
         onEventClick={handleEventClick}
         setEvents={(newEvents) => {
           // Convert calendar events back to our stored format
@@ -253,7 +355,10 @@ export default function CalendarPage() {
           {/* Add + Remove */}
           <div className="px-6 flex gap-2 mb-4">
             <Dialog open={open} onOpenChange={(isOpen) => {
-              if (!isOpen) resetForm();
+              if (!isOpen) {
+                resetForm();
+                setShowTrainingPlan(false); // Reset visibility state
+              }
               setOpen(isOpen);
             }}>
               <DialogTrigger asChild>
@@ -271,9 +376,7 @@ export default function CalendarPage() {
                     <Input
                       id="title"
                       value={form.title}
-                      onChange={(e) =>
-                        setForm({ ...form, title: e.target.value })
-                      }
+                      onChange={(e) => setForm({ ...form, title: e.target.value })}
                     />
                   </div>
                   <div>
@@ -282,9 +385,7 @@ export default function CalendarPage() {
                       id="start"
                       type="datetime-local"
                       value={form.start.slice(0, 16)}
-                      onChange={(e) =>
-                        setForm({ ...form, start: e.target.value })
-                      }
+                      onChange={(e) => setForm({ ...form, start: e.target.value })}
                     />
                   </div>
                   <div>
@@ -293,9 +394,7 @@ export default function CalendarPage() {
                       id="end"
                       type="datetime-local"
                       value={form.end.slice(0, 16)}
-                      onChange={(e) =>
-                        setForm({ ...form, end: e.target.value })
-                      }
+                      onChange={(e) => setForm({ ...form, end: e.target.value })}
                     />
                   </div>
                   <div>
@@ -316,6 +415,95 @@ export default function CalendarPage() {
                         <SelectItem value="purple">Purple</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() => setShowTrainingPlan(!showTrainingPlan)}
+                          className="font-medium text-primary hover:text-primary/80 transition-colors duration-200 px-2 py-1 rounded-md cursor-pointer flex items-center gap-1"
+                      >
+                        {showTrainingPlan ? 'Hide' : 'Show'} Training Plan Details
+                      </button>
+                      {selectedEvent?.trainingPlan && (
+                        <div className="text-sm text-muted-foreground">
+                          Current Plan: {selectedEvent.trainingPlan.title}
+                        </div>
+                      )}
+                    </div>
+
+                    {showTrainingPlan && (
+                      <>
+                        <div>
+                          <Label htmlFor="training-title">Training Plan Title</Label>
+                          <Input
+                            id="training-title"
+                            value={form.trainingPlan.title}
+                            onChange={(e) =>
+                              setForm({
+                                ...form,
+                                trainingPlan: { ...form.trainingPlan, title: e.target.value }
+                              })
+                            }
+                            placeholder="e.g., High Intensity Interval Training"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="training-description">Description</Label>
+                          <Input
+                            id="training-description"
+                            value={form.trainingPlan.description}
+                            onChange={(e) =>
+                              setForm({
+                                ...form,
+                                trainingPlan: { ...form.trainingPlan, description: e.target.value }
+                              })
+                            }
+                            placeholder="Brief description of the training plan"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="training-duration">Duration (minutes)</Label>
+                          <Input
+                            id="training-duration"
+                            type="number"
+                            min="1"
+                            value={form.trainingPlan.duration}
+                            onChange={(e) =>
+                              setForm({
+                                ...form,
+                                trainingPlan: {
+                                  ...form.trainingPlan,
+                                  duration: parseInt(e.target.value) || 60
+                                }
+                              })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="training-difficulty">Difficulty</Label>
+                          <Select
+                            value={form.trainingPlan.difficulty}
+                            onValueChange={(value: 'Easy' | 'Medium' | 'Hard') =>
+                              setForm({
+                                ...form,
+                                trainingPlan: { ...form.trainingPlan, difficulty: value }
+                              })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select difficulty" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Easy">Easy</SelectItem>
+                              <SelectItem value="Medium">Medium</SelectItem>
+                              <SelectItem value="Hard">Hard</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
                 <DialogFooter className="flex justify-between">

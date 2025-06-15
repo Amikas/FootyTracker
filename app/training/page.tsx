@@ -11,13 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { TrainingSet } from "./types";
+import { TrainingSet, Reminder } from "./types";
 import { useTraining } from "./useTraining";
-import React from "react";
+import { useReminders } from "./useReminders";
+import { Bell, BellOff, Pencil, Trash } from 'lucide-react';
 import { useSession } from "next-auth/react";
 import { Home } from 'lucide-react';
 import Link from 'next/link';
@@ -35,6 +35,10 @@ export default function TrainingPage() {
   const [sessionTitle, setSessionTitle] = useState<string>("");
   const [sessionNotes, setSessionNotes] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
+  const [reminderType, setReminderType] = useState<string>("training");
+  const [reminderDate, setReminderDate] = useState<Date>(new Date());
+  const [reminderHour, setReminderHour] = useState<string>("12");
+  const [reminderMessage, setReminderMessage] = useState<string>("");
 
   // After authentication check, declare custom hooks
   const {
@@ -46,6 +50,15 @@ export default function TrainingPage() {
     getProgress,
     getExerciseName
   } = useTraining();
+
+  const {
+    reminders,
+    saveReminder,
+    deleteReminder,
+    editReminder,
+    notificationPermission,
+    requestNotificationPermission,
+  } = useReminders(session?.user?.id || '');
 
   // Early returns for loading and authentication
   if (status === "loading") {
@@ -195,10 +208,11 @@ export default function TrainingPage() {
       </div>
 
       <Tabs defaultValue="new" value={activeTab} onValueChange={setActiveTab} className="mb-6">
-        <TabsList className="grid grid-cols-3 w-full max-w-md mb-6">
+        <TabsList className="grid grid-cols-4 w-full max-w-md mb-6">
           <TabsTrigger value="new">New Session</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
           <TabsTrigger value="progress">Progress</TabsTrigger>
+          <TabsTrigger value="reminders">Reminders</TabsTrigger>
         </TabsList>
 
         <TabsContent value="new">
@@ -500,6 +514,197 @@ export default function TrainingPage() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="reminders">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Set Reminders</CardTitle>
+                <CardDescription>Create reminders for your training activities</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {notificationPermission !== 'granted' && (
+                    <Alert>
+                      <AlertDescription className="flex items-center gap-2">
+                        <BellOff className="h-4 w-4" />
+                        Notifications are {notificationPermission === 'denied' ? 'blocked' : 'not enabled'}.
+                        {notificationPermission !== 'denied' && (
+                          <Button variant="outline" size="sm" onClick={requestNotificationPermission}>
+                            Enable Notifications
+                          </Button>
+                        )}
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label>Reminder Type</Label>
+                    <Select value={reminderType} onValueChange={setReminderType}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select reminder type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="hydration">Hydration</SelectItem>
+                        <SelectItem value="stretching">Stretching</SelectItem>
+                        <SelectItem value="training">Training</SelectItem>
+                        <SelectItem value="general">General</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Date</Label>
+                    <div className="flex justify-center">
+                      <Calendar
+                        mode="single"
+                        selected={reminderDate}
+                        onSelect={(day: Date | undefined) => day && setReminderDate(day)}
+                        className="rounded-md border"
+                        disabled={(date) => date < new Date()}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Time (Hour)</Label>
+                    <Select value={reminderHour} onValueChange={setReminderHour}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select hour" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 24 }, (_, i) => (
+                          <SelectItem key={i} value={i.toString().padStart(2, '0')}>
+                            {i.toString().padStart(2, '0')}:00
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Message (Optional)</Label>
+                    <Textarea
+                      placeholder="Add a custom message for your reminder"
+                      value={reminderMessage}
+                      onChange={(e) => setReminderMessage(e.target.value)}
+                      rows={3}
+                    />
+                  </div>
+
+                  <Button 
+                    className="w-full"
+                    onClick={() => {                      if (!reminderType || !reminderDate || !reminderHour) return;
+                      
+                      const formattedDate = reminderDate.toISOString().split('T')[0];
+                      saveReminder({
+                        type: reminderType as Reminder['type'],
+                        date: formattedDate,
+                        hour: reminderHour,
+                        message: reminderMessage
+                      });
+
+                      // Reset form
+                      setReminderType('training');
+                      setReminderDate(new Date());
+                      setReminderHour('12');
+                      setReminderMessage('');
+                    }}
+                  >
+                    Set Reminder
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Your Reminders</CardTitle>
+                <CardDescription>Manage your upcoming reminders</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[600px] pr-4">
+                  <div className="space-y-4">                    {reminders
+                      .sort((a, b) => {
+                        try {
+                          const dateA = new Date(`${a.date}T${a.hour}:00:00`);
+                          const dateB = new Date(`${b.date}T${b.hour}:00:00`);
+                          if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                            // Fallback to string comparison if dates are invalid
+                            return a.date.localeCompare(b.date) || a.hour.localeCompare(b.hour);
+                          }
+                          return dateA.getTime() - dateB.getTime();
+                        } catch (e) {
+                          console.error('Sorting error:', e);
+                          return 0;
+                        }
+                      }).map((reminder) => {
+                        const dateStr = `${reminder.date}T${reminder.hour}:00:00`;
+                        const reminderDate = new Date(dateStr);
+                        const isPast = reminderDate < new Date();
+                        
+                        let formattedDate;
+                        try {
+                          formattedDate = format(reminderDate, 'EEEE, MMMM d, yyyy');
+                        } catch (e) {
+                          console.error('Date formatting error:', e);
+                          formattedDate = reminder.date;
+                        }
+                        
+                        return (
+                          <Card key={reminder.id} className={`bg-muted/40 ${reminder.isCompleted || isPast ? 'opacity-50' : ''}`}>
+                            <CardHeader className="py-4">
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <CardTitle className="text-base capitalize">
+                                    {reminder.type}
+                                  </CardTitle>
+                                  <CardDescription>
+                                    {formattedDate} at {reminder.hour}:00
+                                  </CardDescription>
+                                </div>
+                                <div className="flex gap-2">
+                                  {!reminder.isCompleted && !isPast && (
+                                    <>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => {
+                                          setReminderType(reminder.type);
+                                          setReminderDate(new Date(reminder.date));
+                                          setReminderHour(reminder.hour);
+                                          setReminderMessage(reminder.message || '');
+                                          deleteReminder(reminder.id);
+                                        }}
+                                      >
+                                        <Pencil className="h-4 w-4" />
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => deleteReminder(reminder.id)}
+                                      >
+                                        <Trash className="h-4 w-4" />
+                                      </Button>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </CardHeader>
+                            {reminder.message && (
+                              <CardContent className="py-2">
+                                <p className="text-sm text-muted-foreground">{reminder.message}</p>
+                              </CardContent>
+                            )}
+                          </Card>
+                        );
+                      })}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

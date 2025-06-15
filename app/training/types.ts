@@ -48,3 +48,14 @@ export interface TrainingProgressEntry {
   exercise: string;
   [date: string]: string | number;
 }
+
+export interface Reminder {
+  id: string;
+  userId: string;
+  type: 'hydration' | 'stretching' | 'training' | 'general';
+  date: string;
+  hour: string;
+  message?: string;
+  isCompleted: boolean;
+  createdAt: string;
+}

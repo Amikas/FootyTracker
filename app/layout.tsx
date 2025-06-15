@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 import Providers from "./providers"
 
@@ -12,7 +13,6 @@ export const metadata: Metadata = {
   title: "Footy Tracker - Performance Monitoring for Football Players",
   description:
     "Track and analyze your football training performance with automated data collection and personalized insights.",
-  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -28,6 +28,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

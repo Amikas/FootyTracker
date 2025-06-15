@@ -91,6 +91,14 @@ export type CalendarEvent = {
   end: Date;
   title: string;
   color?: VariantProps<typeof monthEventVariants>['variant'];
+  trainingPlan?: {
+    id?: string;
+    title: string;
+    description?: string;
+    duration: number;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    exercises: any[];
+  };
 };
 
 type CalendarProps = {
@@ -190,6 +198,26 @@ const CalendarViewTrigger = forwardRef<
 });
 CalendarViewTrigger.displayName = 'CalendarViewTrigger';
 
+const TrainingPlanDetails = ({ trainingPlan }: { trainingPlan: CalendarEvent['trainingPlan'] }) => {
+  if (!trainingPlan) return null;
+
+  return (
+    <div className="mt-1 text-xs space-y-1">
+      <div className="flex items-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        <span className="font-medium truncate">{trainingPlan.title}</span>
+      </div>
+      <div className="text-muted-foreground/70 text-[10px] flex items-center gap-1">
+        <span>{trainingPlan.difficulty}</span>
+        <span>·</span>
+        <span>{trainingPlan.duration}m</span>
+      </div>
+    </div>
+  );
+};
+
 const EventGroup = ({
   events,
   hour,
@@ -200,7 +228,7 @@ const EventGroup = ({
   const { onEventClick } = useCalendar();
   
   return (
-    <div className="h-20 border-t last:border-b">
+    <div className="h-20 border-t last:border-b relative">
       {events
         .filter((event) => isSameHour(event.start, hour))
         .map((event) => {
@@ -212,16 +240,22 @@ const EventGroup = ({
             <div
               key={event.id}
               className={cn(
-                'relative cursor-pointer',
+                'absolute w-full cursor-pointer overflow-hidden',
                 dayEventVariants({ variant: event.color })
               )}
               style={{
                 top: `${startPosition * 100}%`,
                 height: `${hoursDifference * 100}%`,
+                minHeight: '1.5rem'
               }}
               onClick={() => onEventClick?.(event)}
             >
-              {event.title}
+              <div className="p-1 h-full">
+                <div className="font-medium truncate">{event.title}</div>
+                {event.trainingPlan && (
+                  <TrainingPlanDetails trainingPlan={event.trainingPlan} />
+                )}
+              </div>
             </div>
           );
         })}
@@ -331,7 +365,7 @@ const CalendarWeekView = () => {
 };
 
 const CalendarMonthView = () => {
-  const { date, view, events, locale, onEventClick } = useCalendar();
+  const { view, date, events, locale, onEventClick, today } = useCalendar();
 
   const monthDates = useMemo(() => getDaysInMonth(date), [date]);
   const weekDays = useMemo(() => generateWeekdays(locale), [locale]);
@@ -369,33 +403,38 @@ const CalendarMonthView = () => {
             >
               <span
                 className={cn(
-                  'size-6 grid place-items-center rounded-full mb-1 sticky top-0',
+                  'size-6 grid place-items-center rounded-full mb-1 sticky top-0 bg-background',
                   isToday(_date) && 'bg-primary text-primary-foreground'
                 )}
               >
                 {format(_date, 'd')}
               </span>
 
-              {currentEvents.map((event) => {
-                return (
+              <div className="space-y-1">
+                {currentEvents.map((event) => (
                   <div
                     key={event.id}
-                    className="px-1 rounded text-sm flex items-center gap-1 cursor-pointer hover:bg-accent/50"
+                    className="px-1 rounded text-sm flex flex-col cursor-pointer hover:bg-accent/50"
                     onClick={() => onEventClick?.(event)}
                   >
-                    <div
-                      className={cn(
-                        'shrink-0',
-                        monthEventVariants({ variant: event.color })
-                      )}
-                    ></div>
-                    <span className="flex-1 truncate">{event.title}</span>
-                    <time className="tabular-nums text-muted-foreground/50 text-xs">
-                      {format(event.start, 'HH:mm')}
-                    </time>
+                    <div className="flex items-center gap-1">
+                      <div
+                        className={cn(
+                          'shrink-0',
+                          monthEventVariants({ variant: event.color })
+                        )}
+                      ></div>
+                      <span className="flex-1 truncate">{event.title}</span>
+                      <time className="tabular-nums text-muted-foreground/50 text-xs">
+                        {format(event.start, 'HH:mm')}
+                      </time>
+                    </div>
+                    {event.trainingPlan && (
+                      <TrainingPlanDetails trainingPlan={event.trainingPlan} />
+                    )}
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           );
         })}

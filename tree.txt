@@ -1,5 +1,4 @@
 npx tree-node-cli -I "node_modules"
-
 FootyTracker
 ├── DBsetup.md
 ├── LICENSE
@@ -13,14 +12,14 @@ FootyTracker
 │   │   │   └── recent
 │   │   │       └── route.ts
 │   │   ├── auth
-│   │   │   ├── login
+│   │   │   ├── [...nextauth]
 │   │   │   │   └── route.ts
 │   │   │   ├── profile
 │   │   │   │   └── route.ts
 │   │   │   └── register
 │   │   │       └── route.ts
 │   │   ├── calendar
-│   │   │   ├── attachments
+│   │   │   ├── [id]
 │   │   │   │   └── route.ts
 │   │   │   └── route.ts
 │   │   ├── export
@@ -38,25 +37,25 @@ FootyTracker
 │   │   │       └── route.ts
 │   │   ├── goals
 │   │   │   └── route.ts
-│   │   └── profile
+│   │   ├── profile
+│   │   │   └── route.ts
+│   │   ├── training
+│   │   │   └── route.ts
+│   │   └── training-plans
 │   │       └── route.ts
+│   ├── auth
+│   │   └── error
+│   │       └── page.tsx
 │   ├── calendar
-│   │   ├── layout.tsx
 │   │   └── page.tsx
 │   ├── components
 │   │   └── Calendar
-│   │       ├── Calendar.tsx
-│   │       ├── DayView.tsx
-│   │       ├── MonthView.tsx
-│   │       └── WeekView.tsx
 │   ├── connect-fitbit
 │   │   └── page.tsx
 │   ├── connect-nike
 │   │   └── page.tsx
 │   ├── connect-strava
 │   │   └── page.tsx
-│   ├── contexts
-│   │   └── CalendarContext.tsx
 │   ├── favicon.ico
 │   ├── globals.css
 │   ├── layout.tsx
@@ -69,6 +68,8 @@ FootyTracker
 │   ├── profile
 │   │   └── page.tsx
 │   ├── providers.tsx
+│   ├── register
+│   │   └── page.tsx
 │   ├── settings
 │   │   └── page.tsx
 │   ├── stats
@@ -79,7 +80,6 @@ FootyTracker
 │   │   ├── types.ts
 │   │   └── useTraining.ts
 │   └── types
-│       ├── calendar.ts
 │       └── ldrs.d.ts
 ├── components
 │   ├── activity-display.tsx
@@ -112,6 +112,7 @@ FootyTracker
 │       ├── collapsible.tsx
 │       ├── command.tsx
 │       ├── context-menu.tsx
+│       ├── customcalendar.tsx
 │       ├── dialog.tsx
 │       ├── drawer.tsx
 │       ├── dropdown-menu.tsx
@@ -168,30 +169,6 @@ FootyTracker
 ├── postcss.config.mjs
 ├── prisma
 │   ├── generated
-│   │   └── client
-│   │       ├── client.d.ts
-│   │       ├── client.js
-│   │       ├── default.d.ts
-│   │       ├── default.js
-│   │       ├── edge.d.ts
-│   │       ├── edge.js
-│   │       ├── index-browser.js
-│   │       ├── index.d.ts
-│   │       ├── index.js
-│   │       ├── package.json
-│   │       ├── query_engine-windows.dll.node
-│   │       ├── runtime
-│   │       │   ├── edge-esm.js
-│   │       │   ├── edge.js
-│   │       │   ├── index-browser.d.ts
-│   │       │   ├── index-browser.js
-│   │       │   ├── library.d.ts
-│   │       │   ├── library.js
-│   │       │   ├── react-native.js
-│   │       │   └── wasm.js
-│   │       ├── schema.prisma
-│   │       ├── wasm.d.ts
-│   │       └── wasm.js
 │   ├── migrations
 │   │   ├── 20250327164208_init
 │   │   │   └── migration.sql
@@ -215,6 +192,11 @@ FootyTracker
 │   │   │   └── migration.sql
 │   │   ├── 20250426215409_add_calendar_models
 │   │   │   └── migration.sql
+│   │   ├── 20250504134955_init_training_models
+│   │   │   └── migration.sql
+│   │   ├── 20250504153834_add_training_plan_model
+│   │   │   └── migration.sql
+│   │   ├── 20250512185217_update_calendar_relations
 │   │   └── migration_lock.toml
 │   └── schema.prisma
 ├── public

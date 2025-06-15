@@ -20,16 +20,18 @@ model FitbitActivity {
 }
 
 model UserProfile {
-  id        String   @id @default(cuid())
-  username  String   @unique
+  id        String    @id @default(cuid())
+  username  String    @unique
   password  String
   name      String
   age       Int?
   weightKg  Float?
   heightCm  Float?
   avatarUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  reminders Reminder[]  
 }
 
 model Goal {
@@ -134,4 +136,28 @@ model TrainingSet {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Reminder {
+  id          String      @id @default(cuid())
+  userId      String
+  user        UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  category    ReminderCategory
+  date        DateTime
+  isRecurring Boolean     @default(false)
+  frequency   String?     // "daily", "weekly", "monthly"
+  lastTriggered DateTime?
+  isCompleted Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([date])
+}
+
+enum ReminderCategory {
+  TRAINING
+  GOALS
+  GENERAL
 }
