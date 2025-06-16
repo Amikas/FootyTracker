@@ -5,6 +5,7 @@ export interface Exercise {
   name: string;
   category: string;
   description?: string;
+  createdBy?: string;  // userId of creator
 }
 
 export interface TrainingSet {
@@ -58,4 +59,17 @@ export interface Reminder {
   message?: string;
   isCompleted: boolean;
   createdAt: string;
+}
+
+export interface Routine {
+  id: string;
+  userId: string;
+  name: string;
+  description?: string;
+  exercises: {
+    exerciseId: string;
+    order: number;
+  }[];
+  createdAt?: string;
+  updatedAt?: string;
 }

@@ -1,26 +1,55 @@
 // app/training/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { TrainingSet, Reminder } from "./types";
-import { useTraining } from "./useTraining";
-import { useReminders } from "./useReminders";
-import { Bell, BellOff, Pencil, Trash } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { format } from "date-fns";
+import { BellOff, Home, Pencil, Plus, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { Home } from 'lucide-react';
-import Link from 'next/link';
+import Link from "next/link";
+import { useState } from "react";
+import { Exercise, Reminder, TrainingSet } from "./types";
+import { useReminders } from "./useReminders";
+import { useTraining } from "./useTraining";
 
 export default function TrainingPage() {
   // First, declare all authentication and session-related hooks
@@ -39,16 +68,30 @@ export default function TrainingPage() {
   const [reminderDate, setReminderDate] = useState<Date>(new Date());
   const [reminderHour, setReminderHour] = useState<string>("12");
   const [reminderMessage, setReminderMessage] = useState<string>("");
+  const [newExerciseName, setNewExerciseName] = useState("");
+  const [newExerciseCategory, setNewExerciseCategory] = useState("");
+  const [newExerciseDescription, setNewExerciseDescription] = useState("");
+  const [newRoutineName, setNewRoutineName] = useState("");
+  const [newRoutineDescription, setNewRoutineDescription] = useState("");
+  const [selectedRoutineExercises, setSelectedRoutineExercises] = useState<
+    string[]
+  >([]);
+  const [isCreatingExercise, setIsCreatingExercise] = useState(false);
+  const [isCreatingRoutine, setIsCreatingRoutine] = useState(false);
 
   // After authentication check, declare custom hooks
   const {
     exercises,
     sessions,
+    routines,
     loading,
     error,
     createSession,
     getProgress,
-    getExerciseName
+    getExerciseName,
+    createNewExercise,
+    createNewRoutine,
+    getRoutineExercises,
   } = useTraining();
 
   const {
@@ -58,7 +101,7 @@ export default function TrainingPage() {
     editReminder,
     notificationPermission,
     requestNotificationPermission,
-  } = useReminders(session?.user?.id || '');
+  } = useReminders(session?.user?.id || "");
 
   // Early returns for loading and authentication
   if (status === "loading") {
@@ -67,7 +110,10 @@ export default function TrainingPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">FootyTracker Training</h1>
           <Link href="/">
-            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+            <Button
+              variant="outline"
+              className="gap-2 bg-background hover:bg-background/90 text-foreground"
+            >
               <Home className="h-5 w-5" />
               Return to Home
             </Button>
@@ -84,7 +130,10 @@ export default function TrainingPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">FootyTracker Training</h1>
           <Link href="/">
-            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+            <Button
+              variant="outline"
+              className="gap-2 bg-background hover:bg-background/90 text-foreground"
+            >
               <Home className="h-5 w-5" />
               Return to Home
             </Button>
@@ -102,7 +151,7 @@ export default function TrainingPage() {
 
     setCurrentSession([
       ...currentSession,
-      { exerciseId: currentExercise, repetitions }
+      { exerciseId: currentExercise, repetitions },
     ]);
 
     setCurrentExercise("");
@@ -133,15 +182,17 @@ export default function TrainingPage() {
   };
 
   const renderExerciseCategories = () => {
-    const categories = [...new Set(exercises.map(ex => ex.category))];
+    const categories = [...new Set(exercises.map((ex) => ex.category))];
 
-    return categories.map(category => (
+    return categories.map((category) => (
       <div key={category} className="mb-4">
-        <h3 className="text-sm font-medium text-muted-foreground mb-2">{category}</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-2">
+          {category}
+        </h3>
         <div className="space-y-1">
           {exercises
-            .filter(ex => ex.category === category)
-            .map(exercise => (
+            .filter((ex) => ex.category === category)
+            .map((exercise) => (
               <SelectItem key={exercise.id} value={exercise.id}>
                 {exercise.name}
               </SelectItem>
@@ -158,7 +209,10 @@ export default function TrainingPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">FootyTracker Training</h1>
           <Link href="/">
-            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+            <Button
+              variant="outline"
+              className="gap-2 bg-background hover:bg-background/90 text-foreground"
+            >
               <Home className="h-5 w-5" />
               Return to Home
             </Button>
@@ -182,7 +236,10 @@ export default function TrainingPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">FootyTracker Training</h1>
           <Link href="/">
-            <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+            <Button
+              variant="outline"
+              className="gap-2 bg-background hover:bg-background/90 text-foreground"
+            >
               <Home className="h-5 w-5" />
               Return to Home
             </Button>
@@ -200,19 +257,28 @@ export default function TrainingPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">FootyTracker Training</h1>
         <Link href="/">
-          <Button variant="outline" className="gap-2 bg-background hover:bg-background/90 text-foreground">
+          <Button
+            variant="outline"
+            className="gap-2 bg-background hover:bg-background/90 text-foreground"
+          >
             <Home className="h-5 w-5" />
             Return to Home
           </Button>
         </Link>
       </div>
 
-      <Tabs defaultValue="new" value={activeTab} onValueChange={setActiveTab} className="mb-6">
-        <TabsList className="grid grid-cols-4 w-full max-w-md mb-6">
+      <Tabs
+        defaultValue="new"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="mb-6"
+      >
+        <TabsList className="grid grid-cols-5 w-full max-w-lg mb-6">
           <TabsTrigger value="new">New Session</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
           <TabsTrigger value="progress">Progress</TabsTrigger>
           <TabsTrigger value="reminders">Reminders</TabsTrigger>
+          <TabsTrigger value="routines">Routines</TabsTrigger>
         </TabsList>
 
         <TabsContent value="new">
@@ -220,7 +286,9 @@ export default function TrainingPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Create Training Session</CardTitle>
-                <CardDescription>Record your training exercises and repetitions</CardDescription>
+                <CardDescription>
+                  Record your training exercises and repetitions
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4 mb-6">
@@ -234,27 +302,63 @@ export default function TrainingPage() {
                     />
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="routine">Select Routine (Optional)</Label>
+                    <Select
+                      value=""
+                      onValueChange={(routineId) => {
+                        if (routineId) {
+                          const routineExercises =
+                            getRoutineExercises(routineId);
+                          setCurrentSession(
+                            routineExercises.map((exercise) => ({
+                              exerciseId: exercise.id,
+                              repetitions: 0,
+                            }))
+                          );
+                        }
+                      }}
+                    >
+                      <SelectTrigger id="routine">
+                        <SelectValue placeholder="Select a routine" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {routines.map((routine) => (
+                          <SelectItem key={routine.id} value={routine.id}>
+                            {routine.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
                   <div className="space-y-2 ">
-                    <Label htmlFor="date" className="block text-center mb-10">Training Date</Label>
+                    <Label htmlFor="date" className="block text-center mb-10">
+                      Training Date
+                    </Label>
                     <div className="flex justify-center">
                       <div className="scale-110">
                         <Calendar
                           mode="single"
                           selected={date}
-                          onSelect={(day: Date | undefined) => day && setDate(day)}
+                          onSelect={(day: Date | undefined) =>
+                            day && setDate(day)
+                          }
                           className="rounded-md border"
                         />
                       </div>
                     </div>
                   </div>
-
                 </div>
 
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="exercise">Exercise</Label>
-                      <Select value={currentExercise} onValueChange={setCurrentExercise}>
+                      <Select
+                        value={currentExercise}
+                        onValueChange={setCurrentExercise}
+                      >
                         <SelectTrigger id="exercise">
                           <SelectValue placeholder="Select exercise" />
                         </SelectTrigger>
@@ -270,7 +374,9 @@ export default function TrainingPage() {
                         type="number"
                         min="1"
                         value={repetitions || ""}
-                        onChange={(e) => setRepetitions(parseInt(e.target.value) || 0)}
+                        onChange={(e) =>
+                          setRepetitions(parseInt(e.target.value) || 0)
+                        }
                       />
                     </div>
                   </div>
@@ -301,13 +407,17 @@ export default function TrainingPage() {
                 <CardDescription>
                   {currentSession.length === 0
                     ? "No exercises added yet"
-                    : `${currentSession.length} exercise${currentSession.length > 1 ? 's' : ''} added`}
+                    : `${currentSession.length} exercise${
+                        currentSession.length > 1 ? "s" : ""
+                      } added`}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {currentSession.length === 0 ? (
                   <div className="text-center py-12 border-2 border-dashed rounded-lg">
-                    <p className="text-muted-foreground">Add exercises to start your training session</p>
+                    <p className="text-muted-foreground">
+                      Add exercises to start your training session
+                    </p>
                   </div>
                 ) : (
                   <ScrollArea className="h-72">
@@ -318,10 +428,28 @@ export default function TrainingPage() {
                           className="flex items-center justify-between border-b pb-2"
                         >
                           <div>
-                            <p className="font-medium">{getExerciseName(set.exerciseId)}</p>
+                            <p className="font-medium">
+                              {getExerciseName(set.exerciseId)}
+                            </p>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span className="font-medium">{set.repetitions} reps</span>
+                            <Input
+                              type="number"
+                              min="0"
+                              value={set.repetitions || ""}
+                              onChange={(e) => {
+                                const newSession = [...currentSession];
+                                newSession[index] = {
+                                  ...set,
+                                  repetitions: parseInt(e.target.value) || 0,
+                                };
+                                setCurrentSession(newSession);
+                              }}
+                              className="w-20"
+                            />
+                            <span className="text-sm text-muted-foreground">
+                              reps
+                            </span>
                             <Button
                               variant="ghost"
                               size="sm"
@@ -344,7 +472,11 @@ export default function TrainingPage() {
                 <Button
                   className="w-full"
                   onClick={saveSession}
-                  disabled={currentSession.length === 0 || isSaving}
+                  disabled={
+                    currentSession.length === 0 ||
+                    isSaving ||
+                    currentSession.some((set) => set.repetitions <= 0)
+                  }
                 >
                   {isSaving ? "Saving..." : "Save Training Session"}
                 </Button>
@@ -357,12 +489,16 @@ export default function TrainingPage() {
           <Card>
             <CardHeader>
               <CardTitle>Training History</CardTitle>
-              <CardDescription>View your past training sessions</CardDescription>
+              <CardDescription>
+                View your past training sessions
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {sessions.length === 0 ? (
                 <div className="text-center py-12 border-2 border-dashed rounded-lg">
-                  <p className="text-muted-foreground">No training sessions recorded yet</p>
+                  <p className="text-muted-foreground">
+                    No training sessions recorded yet
+                  </p>
                   <Button
                     variant="outline"
                     className="mt-4"
@@ -374,14 +510,28 @@ export default function TrainingPage() {
               ) : (
                 <div className="space-y-6">
                   {sessions
-                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .sort(
+                      (a, b) =>
+                        new Date(b.date).getTime() - new Date(a.date).getTime()
+                    )
                     .map((session) => (
                       <Card key={session.id} className="bg-muted/40">
                         <CardHeader className="pb-2">
                           <div className="flex justify-between items-center">
                             <div>
-                              <CardTitle className="text-lg">{session.title || format(new Date(session.date), "MMMM d, yyyy")}</CardTitle>
-                              <CardDescription>{format(new Date(session.date), "EEEE, MMMM d, yyyy")}</CardDescription>
+                              <CardTitle className="text-lg">
+                                {session.title ||
+                                  format(
+                                    new Date(session.date),
+                                    "MMMM d, yyyy"
+                                  )}
+                              </CardTitle>
+                              <CardDescription>
+                                {format(
+                                  new Date(session.date),
+                                  "EEEE, MMMM d, yyyy"
+                                )}
+                              </CardDescription>
                             </div>
                             <div className="bg-primary text-primary-foreground px-3 py-1 rounded-md text-sm">
                               {session.sets.length} exercises
@@ -391,15 +541,22 @@ export default function TrainingPage() {
                         <CardContent>
                           <div className="space-y-2">
                             {session.sets.map((set, idx) => (
-                              <div key={idx} className="flex justify-between items-center py-1 border-b border-border/50">
+                              <div
+                                key={idx}
+                                className="flex justify-between items-center py-1 border-b border-border/50"
+                              >
                                 <span>{getExerciseName(set.exerciseId)}</span>
-                                <span className="font-medium">{set.repetitions} reps</span>
+                                <span className="font-medium">
+                                  {set.repetitions} reps
+                                </span>
                               </div>
                             ))}
 
                             {session.notes && (
                               <div className="mt-4 pt-2 border-t">
-                                <p className="text-sm text-muted-foreground">{session.notes}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {session.notes}
+                                </p>
                               </div>
                             )}
                           </div>
@@ -416,12 +573,16 @@ export default function TrainingPage() {
           <Card>
             <CardHeader>
               <CardTitle>Training Progress</CardTitle>
-              <CardDescription>Analyze how your performance has developed over time</CardDescription>
+              <CardDescription>
+                Analyze how your performance has developed over time
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {progressData.length === 0 ? (
                 <div className="text-center py-12 border-2 border-dashed rounded-lg">
-                  <p className="text-muted-foreground">Not enough data to show progress yet</p>
+                  <p className="text-muted-foreground">
+                    Not enough data to show progress yet
+                  </p>
                   <p className="text-sm text-muted-foreground mt-2">
                     Complete more training sessions to see your progress
                   </p>
@@ -443,13 +604,24 @@ export default function TrainingPage() {
                       >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="exercise" />
-                        <YAxis label={{ value: 'Repetitions', angle: -90, position: 'insideLeft' }} />
+                        <YAxis
+                          label={{
+                            value: "Repetitions",
+                            angle: -90,
+                            position: "insideLeft",
+                          }}
+                        />
                         <Tooltip />
                         <Legend />
                         {sessions.map((session) => {
-                          const dateLabel = format(new Date(session.date), "MMM dd");
+                          const dateLabel = format(
+                            new Date(session.date),
+                            "MMM dd"
+                          );
                           // Generate a consistent color based on the date string
-                          const color = `hsl(${(dateLabel.charCodeAt(0) * 5) % 360}, 70%, 50%)`;
+                          const color = `hsl(${
+                            (dateLabel.charCodeAt(0) * 5) % 360
+                          }, 70%, 50%)`;
 
                           return (
                             <Line
@@ -476,22 +648,32 @@ export default function TrainingPage() {
 
                       // Calculate improvement
                       const firstValue = parseInt(dataEntries[0][1] as string);
-                      const lastValue = parseInt(dataEntries[dataEntries.length - 1][1] as string);
+                      const lastValue = parseInt(
+                        dataEntries[dataEntries.length - 1][1] as string
+                      );
                       const improvement = lastValue - firstValue;
-                      const percentageImprovement = ((lastValue - firstValue) / firstValue * 100).toFixed(1);
+                      const percentageImprovement = (
+                        ((lastValue - firstValue) / firstValue) *
+                        100
+                      ).toFixed(1);
 
                       return (
                         <Card key={index} className="bg-muted/40">
                           <CardHeader className="pb-2">
-                            <CardTitle className="text-lg">{exerciseName}</CardTitle>
+                            <CardTitle className="text-lg">
+                              {exerciseName}
+                            </CardTitle>
                             <CardDescription>
                               {improvement >= 0 ? (
                                 <span className="text-green-500">
-                                  Improved by {improvement} reps ({percentageImprovement}%)
+                                  Improved by {improvement} reps (
+                                  {percentageImprovement}%)
                                 </span>
                               ) : (
                                 <span className="text-red-500">
-                                  Decreased by {Math.abs(improvement)} reps ({Math.abs(parseFloat(percentageImprovement))}%)
+                                  Decreased by {Math.abs(improvement)} reps (
+                                  {Math.abs(parseFloat(percentageImprovement))}
+                                  %)
                                 </span>
                               )}
                             </CardDescription>
@@ -499,9 +681,14 @@ export default function TrainingPage() {
                           <CardContent>
                             <div className="space-y-2">
                               {dataEntries.map(([date, value], idx) => (
-                                <div key={idx} className="flex justify-between items-center py-1 border-b border-border/50">
+                                <div
+                                  key={idx}
+                                  className="flex justify-between items-center py-1 border-b border-border/50"
+                                >
                                   <span>{date}</span>
-                                  <span className="font-medium">{value} reps</span>
+                                  <span className="font-medium">
+                                    {value} reps
+                                  </span>
                                 </div>
                               ))}
                             </div>
@@ -521,17 +708,27 @@ export default function TrainingPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Set Reminders</CardTitle>
-                <CardDescription>Create reminders for your training activities</CardDescription>
+                <CardDescription>
+                  Create reminders for your training activities
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {notificationPermission !== 'granted' && (
+                  {notificationPermission !== "granted" && (
                     <Alert>
                       <AlertDescription className="flex items-center gap-2">
                         <BellOff className="h-4 w-4" />
-                        Notifications are {notificationPermission === 'denied' ? 'blocked' : 'not enabled'}.
-                        {notificationPermission !== 'denied' && (
-                          <Button variant="outline" size="sm" onClick={requestNotificationPermission}>
+                        Notifications are{" "}
+                        {notificationPermission === "denied"
+                          ? "blocked"
+                          : "not enabled"}
+                        .
+                        {notificationPermission !== "denied" && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={requestNotificationPermission}
+                          >
                             Enable Notifications
                           </Button>
                         )}
@@ -541,7 +738,10 @@ export default function TrainingPage() {
 
                   <div className="space-y-2">
                     <Label>Reminder Type</Label>
-                    <Select value={reminderType} onValueChange={setReminderType}>
+                    <Select
+                      value={reminderType}
+                      onValueChange={setReminderType}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select reminder type" />
                       </SelectTrigger>
@@ -560,7 +760,9 @@ export default function TrainingPage() {
                       <Calendar
                         mode="single"
                         selected={reminderDate}
-                        onSelect={(day: Date | undefined) => day && setReminderDate(day)}
+                        onSelect={(day: Date | undefined) =>
+                          day && setReminderDate(day)
+                        }
                         className="rounded-md border"
                         disabled={(date) => date < new Date()}
                       />
@@ -569,14 +771,20 @@ export default function TrainingPage() {
 
                   <div className="space-y-2">
                     <Label>Time (Hour)</Label>
-                    <Select value={reminderHour} onValueChange={setReminderHour}>
+                    <Select
+                      value={reminderHour}
+                      onValueChange={setReminderHour}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select hour" />
                       </SelectTrigger>
                       <SelectContent>
                         {Array.from({ length: 24 }, (_, i) => (
-                          <SelectItem key={i} value={i.toString().padStart(2, '0')}>
-                            {i.toString().padStart(2, '0')}:00
+                          <SelectItem
+                            key={i}
+                            value={i.toString().padStart(2, "0")}
+                          >
+                            {i.toString().padStart(2, "0")}:00
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -593,23 +801,27 @@ export default function TrainingPage() {
                     />
                   </div>
 
-                  <Button 
+                  <Button
                     className="w-full"
-                    onClick={() => {                      if (!reminderType || !reminderDate || !reminderHour) return;
-                      
-                      const formattedDate = reminderDate.toISOString().split('T')[0];
+                    onClick={() => {
+                      if (!reminderType || !reminderDate || !reminderHour)
+                        return;
+
+                      const formattedDate = reminderDate
+                        .toISOString()
+                        .split("T")[0];
                       saveReminder({
-                        type: reminderType as Reminder['type'],
+                        type: reminderType as Reminder["type"],
                         date: formattedDate,
                         hour: reminderHour,
-                        message: reminderMessage
+                        message: reminderMessage,
                       });
 
                       // Reset form
-                      setReminderType('training');
+                      setReminderType("training");
                       setReminderDate(new Date());
-                      setReminderHour('12');
-                      setReminderMessage('');
+                      setReminderHour("12");
+                      setReminderMessage("");
                     }}
                   >
                     Set Reminder
@@ -617,43 +829,61 @@ export default function TrainingPage() {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle>Your Reminders</CardTitle>
-                <CardDescription>Manage your upcoming reminders</CardDescription>
+                <CardDescription>
+                  Manage your upcoming reminders
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-[600px] pr-4">
-                  <div className="space-y-4">                    {reminders
+                  <div className="space-y-4">
+                    {" "}
+                    {reminders
                       .sort((a, b) => {
                         try {
                           const dateA = new Date(`${a.date}T${a.hour}:00:00`);
                           const dateB = new Date(`${b.date}T${b.hour}:00:00`);
-                          if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                          if (
+                            isNaN(dateA.getTime()) ||
+                            isNaN(dateB.getTime())
+                          ) {
                             // Fallback to string comparison if dates are invalid
-                            return a.date.localeCompare(b.date) || a.hour.localeCompare(b.hour);
+                            return (
+                              a.date.localeCompare(b.date) ||
+                              a.hour.localeCompare(b.hour)
+                            );
                           }
                           return dateA.getTime() - dateB.getTime();
                         } catch (e) {
-                          console.error('Sorting error:', e);
+                          console.error("Sorting error:", e);
                           return 0;
                         }
-                      }).map((reminder) => {
+                      })
+                      .map((reminder) => {
                         const dateStr = `${reminder.date}T${reminder.hour}:00:00`;
                         const reminderDate = new Date(dateStr);
                         const isPast = reminderDate < new Date();
-                        
+
                         let formattedDate;
                         try {
-                          formattedDate = format(reminderDate, 'EEEE, MMMM d, yyyy');
+                          formattedDate = format(
+                            reminderDate,
+                            "EEEE, MMMM d, yyyy"
+                          );
                         } catch (e) {
-                          console.error('Date formatting error:', e);
+                          console.error("Date formatting error:", e);
                           formattedDate = reminder.date;
                         }
-                        
+
                         return (
-                          <Card key={reminder.id} className={`bg-muted/40 ${reminder.isCompleted || isPast ? 'opacity-50' : ''}`}>
+                          <Card
+                            key={reminder.id}
+                            className={`bg-muted/40 ${
+                              reminder.isCompleted || isPast ? "opacity-50" : ""
+                            }`}
+                          >
                             <CardHeader className="py-4">
                               <div className="flex items-start justify-between">
                                 <div>
@@ -672,9 +902,13 @@ export default function TrainingPage() {
                                         size="sm"
                                         onClick={() => {
                                           setReminderType(reminder.type);
-                                          setReminderDate(new Date(reminder.date));
+                                          setReminderDate(
+                                            new Date(reminder.date)
+                                          );
                                           setReminderHour(reminder.hour);
-                                          setReminderMessage(reminder.message || '');
+                                          setReminderMessage(
+                                            reminder.message || ""
+                                          );
                                           deleteReminder(reminder.id);
                                         }}
                                       >
@@ -683,7 +917,9 @@ export default function TrainingPage() {
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        onClick={() => deleteReminder(reminder.id)}
+                                        onClick={() =>
+                                          deleteReminder(reminder.id)
+                                        }
                                       >
                                         <Trash className="h-4 w-4" />
                                       </Button>
@@ -694,7 +930,9 @@ export default function TrainingPage() {
                             </CardHeader>
                             {reminder.message && (
                               <CardContent className="py-2">
-                                <p className="text-sm text-muted-foreground">{reminder.message}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {reminder.message}
+                                </p>
                               </CardContent>
                             )}
                           </Card>
@@ -702,6 +940,286 @@ export default function TrainingPage() {
                       })}
                   </div>
                 </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        <TabsContent value="routines">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle>Your Routines</CardTitle>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-4 w-4 mr-2" />
+                        New Routine
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Create New Routine</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="routineName">Routine Name</Label>
+                          <Input
+                            id="routineName"
+                            value={newRoutineName}
+                            onChange={(e) => setNewRoutineName(e.target.value)}
+                            placeholder="E.g., Morning Warm-up"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="routineDescription">
+                            Description (Optional)
+                          </Label>
+                          <Textarea
+                            id="routineDescription"
+                            value={newRoutineDescription}
+                            onChange={(e) =>
+                              setNewRoutineDescription(e.target.value)
+                            }
+                            placeholder="Describe your routine..."
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Exercises</Label>
+                          <ScrollArea className="h-48 border rounded-md p-4">
+                            <div className="space-y-2">
+                              {exercises.map((exercise) => (
+                                <div
+                                  key={exercise.id}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id={`exercise-${exercise.id}`}
+                                    checked={selectedRoutineExercises.includes(
+                                      exercise.id
+                                    )}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setSelectedRoutineExercises([
+                                          ...selectedRoutineExercises,
+                                          exercise.id,
+                                        ]);
+                                      } else {
+                                        setSelectedRoutineExercises(
+                                          selectedRoutineExercises.filter(
+                                            (id) => id !== exercise.id
+                                          )
+                                        );
+                                      }
+                                    }}
+                                  />
+                                  <label htmlFor={`exercise-${exercise.id}`}>
+                                    {exercise.name}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
+                        </div>
+                        <Button
+                          className="w-full"
+                          onClick={async () => {
+                            try {
+                              setIsCreatingRoutine(true);
+                              await createNewRoutine({
+                                userId: session?.user?.id || "user1",
+                                name: newRoutineName,
+                                description: newRoutineDescription,
+                                exercises: selectedRoutineExercises.map(
+                                  (id, index) => ({
+                                    exerciseId: id,
+                                    order: index,
+                                  })
+                                ),
+                              });
+                              setNewRoutineName("");
+                              setNewRoutineDescription("");
+                              setSelectedRoutineExercises([]);
+                            } catch (err) {
+                              console.error("Failed to create routine:", err);
+                            } finally {
+                              setIsCreatingRoutine(false);
+                            }
+                          }}
+                          disabled={
+                            !newRoutineName ||
+                            selectedRoutineExercises.length === 0 ||
+                            isCreatingRoutine
+                          }
+                        >
+                          {isCreatingRoutine ? "Creating..." : "Create Routine"}
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {routines.length === 0 ? (
+                  <div className="text-center py-12 border-2 border-dashed rounded-lg">
+                    <p className="text-muted-foreground">
+                      No routines created yet
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {routines.map((routine) => (
+                      <Card key={routine.id} className="bg-muted/40">
+                        <CardHeader>
+                          <CardTitle className="text-lg">
+                            {routine.name}
+                          </CardTitle>
+                          {routine.description && (
+                            <CardDescription>
+                              {routine.description}
+                            </CardDescription>
+                          )}
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            {getRoutineExercises(routine.id).map(
+                              (exercise, index) => (
+                                <div
+                                  key={exercise.id}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <span className="text-muted-foreground">
+                                    {index + 1}.
+                                  </span>
+                                  <span>{exercise.name}</span>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <div className="flex justify-between items-center pr-4">
+                <CardHeader>
+                  <CardTitle>Exercises</CardTitle>
+                </CardHeader>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Plus className="h-4 w-4 mr-2" />
+                      New Exercise
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Create New Exercise</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="exerciseName">Exercise Name</Label>
+                        <Input
+                          id="exerciseName"
+                          value={newExerciseName}
+                          onChange={(e) => setNewExerciseName(e.target.value)}
+                          placeholder="E.g., Jumping Jacks"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="exerciseCategory">Category</Label>
+                        <Input
+                          id="exerciseCategory"
+                          value={newExerciseCategory}
+                          onChange={(e) =>
+                            setNewExerciseCategory(e.target.value)
+                          }
+                          placeholder="E.g., Cardio"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="exerciseDescription">
+                          Description (Optional)
+                        </Label>
+                        <Textarea
+                          id="exerciseDescription"
+                          value={newExerciseDescription}
+                          onChange={(e) =>
+                            setNewExerciseDescription(e.target.value)
+                          }
+                          placeholder="Describe the exercise..."
+                        />
+                      </div>
+                      <Button
+                        className="w-full"
+                        onClick={async () => {
+                          try {
+                            setIsCreatingExercise(true);
+                            await createNewExercise({
+                              name: newExerciseName,
+                              category: newExerciseCategory,
+                              description: newExerciseDescription,
+                              createdBy: session?.user?.id || "user1",
+                            });
+                            setNewExerciseName("");
+                            setNewExerciseCategory("");
+                            setNewExerciseDescription("");
+                          } catch (err) {
+                            console.error("Failed to create exercise:", err);
+                          } finally {
+                            setIsCreatingExercise(false);
+                          }
+                        }}
+                        disabled={
+                          !newExerciseName ||
+                          !newExerciseCategory ||
+                          isCreatingExercise
+                        }
+                      >
+                        {isCreatingExercise ? "Creating..." : "Create Exercise"}
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              <CardContent>
+                <div className="space-y-4">
+                  {Object.entries(
+                    exercises.reduce((acc: Record<string, Exercise[]>, ex) => {
+                      if (!acc[ex.category]) acc[ex.category] = [];
+                      acc[ex.category].push(ex);
+                      return acc;
+                    }, {})
+                  ).map(([category, categoryExercises]) => (
+                    <div key={category}>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">
+                        {category}
+                      </h3>
+                      <div className="space-y-2">
+                        {categoryExercises.map((exercise) => (
+                          <div
+                            key={exercise.id}
+                            className="flex items-center justify-between p-2 bg-muted/40 rounded-md"
+                          >
+                            <div>
+                              <p className="font-medium">{exercise.name}</p>
+                              {exercise.description && (
+                                <p className="text-sm text-muted-foreground">
+                                  {exercise.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>

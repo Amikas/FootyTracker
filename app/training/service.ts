@@ -1,4 +1,4 @@
-import { Exercise, TrainingSession, TrainingProgressEntry } from "./types";
+import { Exercise, TrainingSession, TrainingProgressEntry, Routine } from "./types";
 
 // Fetch all exercises from backend
 export const getExercises = async (): Promise<Exercise[]> => {
@@ -92,5 +92,72 @@ export const getTrainingProgress = async (): Promise<TrainingProgressEntry[]> =>
   } catch (err) {
     console.error("getTrainingProgress error:", err);
     return [];
+  }
+};
+
+// Create a new exercise
+export const createExercise = async (exercise: Omit<Exercise, "id">): Promise<Exercise> => {
+  try {
+    const res = await fetch("/api/training/exercises", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(exercise),
+    });
+
+    if (res.status === 401) {
+      throw new Error("Unauthorized");
+    }
+    if (!res.ok) throw new Error("Failed to create exercise");
+    
+    const json = await res.json();
+    return json.data;
+  } catch (err) {
+    console.error("createExercise error:", err);
+    throw err;
+  }
+};
+
+// Get all routines
+export const getRoutines = async (): Promise<Routine[]> => {
+  try {
+    const res = await fetch("/api/training/routines");
+    if (res.status === 401) {
+      throw new Error("Unauthorized");
+    }
+    if (!res.ok) throw new Error("Failed to fetch routines");
+    const json = await res.json();
+    return json.data || [];
+  } catch (err) {
+    console.error("getRoutines error:", err);
+    if (err instanceof Error && err.message === "Unauthorized") {
+      throw err;
+    }
+    return [];
+  }
+};
+
+// Create a new routine
+export const createRoutine = async (routine: Omit<Routine, "id" | "createdAt" | "updatedAt">): Promise<Routine> => {
+  try {
+    const res = await fetch("/api/training/routines", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(routine),
+    });
+
+    if (res.status === 401) {
+      throw new Error("Unauthorized");
+    }
+    if (!res.ok) throw new Error("Failed to create routine");
+    
+    const json = await res.json();
+    return json.data;
+  } catch (err) {
+    console.error("createRoutine error:", err);
+    throw err;
   }
 };
