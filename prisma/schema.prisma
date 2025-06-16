@@ -28,6 +28,8 @@ model UserProfile {
   weightKg  Float?
   heightCm  Float?
   avatarUrl String?
+  resetToken String?
+  resetTokenExpiry DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 

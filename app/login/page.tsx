@@ -61,6 +61,15 @@ export default function LoginPage() {
                 required
               />
             </div>
+            <div className="text-right">
+              <button
+                type="button"
+                className="text-sm text-blue-500 hover:underline"
+                onClick={() => router.push('/auth/forgot-password')}
+              >
+                Forgot Password?
+              </button>
+            </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
             <Button type="submit" className="w-full">
               Log In
