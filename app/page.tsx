@@ -7,6 +7,7 @@ import TrainingMetrics from "@/components/dashboard/training-metrics"
 import UpcomingGoals from "@/components/dashboard/upcoming-goals"
 import RecentActivities from "@/components/dashboard/recent-activities"
 import { GoalsProvider } from '@/components/contexts/goals-context'
+import OllamaChatbot from "@/components/ollama-chatbot"
 import { BounceLoader } from 'react-spinners'
 
 export default function Dashboard() {
@@ -74,6 +75,7 @@ export default function Dashboard() {
           </GoalsProvider>
         </div>
       </main>
+      <OllamaChatbot />
     </>
   )
 }
