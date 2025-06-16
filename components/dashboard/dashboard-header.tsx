@@ -137,7 +137,7 @@ export default function DashboardHeader() {
               <NavLink href="/">Dashboard</NavLink>
               <NavLink href="/training">Training</NavLink>
               <NavLink href="/stats">Stats</NavLink>
-              <NavLink href="/goals">Goals</NavLink>
+              <NavLink href="/measurements">Measurements</NavLink>
               <NavLink href="/calendar">Calendar</NavLink>
             </nav>
 
@@ -155,7 +155,7 @@ export default function DashboardHeader() {
                 <NavLink href="/">Dashboard</NavLink>
                 <NavLink href="/training">Training</NavLink>
                 <NavLink href="/stats">Stats</NavLink>
-                <NavLink href="/goals">Goals</NavLink>
+                <NavLink href="/measurements">Measurements</NavLink>
                 <NavLink href="/calendar">Calendar</NavLink>
               </div>
             </div>
