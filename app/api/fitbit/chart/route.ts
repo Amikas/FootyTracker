@@ -21,12 +21,36 @@ export async function GET() {
     },
   });
 
-  const formatted = activities.map((entry: { date: string | number | Date; distance: any; }) => ({
-    day: daysOfWeek[new Date(entry.date).getDay()],
-    distance: entry.distance,
-    speed: 12 + Math.random() * 3, // 🔧 Placeholder
-    heartRate: 130 + Math.floor(Math.random() * 20), // 🔧 Placeholder
-  }));
+  // Group by date (YYYY-MM-DD)
+  const grouped: Record<string, { date: Date; distances: number[]; speeds: number[]; heartRates: number[] }> = {};
+  for (const entry of activities) {
+    const dateKey = new Date(entry.date).toISOString().split("T")[0];
+    if (!grouped[dateKey]) {
+      grouped[dateKey] = {
+        date: new Date(entry.date),
+        distances: [],
+        speeds: [],
+        heartRates: [],
+      };
+    }
+    grouped[dateKey].distances.push(entry.distance);
+    // Calculate speed if possible
+    if (entry.duration > 0) {
+      grouped[dateKey].speeds.push(entry.distance / (entry.duration / 3600000)); // km/h
+    }
+    // Use entry.heartRate if available, else skip (if you add heartRate to schema)
+    if ((entry as any).heartRate !== undefined && (entry as any).heartRate !== null) {
+      grouped[dateKey].heartRates.push((entry as any).heartRate);
+    }
+  }
+
+  const formatted = Object.values(grouped).map((group) => {
+    const day = daysOfWeek[group.date.getDay()];
+    const distance = group.distances.reduce((a, b) => a + b, 0);
+    const speed = group.speeds.length > 0 ? +(group.speeds.reduce((a, b) => a + b, 0) / group.speeds.length).toFixed(1) : 0;
+    const heartRate = group.heartRates.length > 0 ? Math.round(group.heartRates.reduce((a, b) => a + b, 0) / group.heartRates.length) : 0;
+    return { day, distance, speed, heartRate };
+  });
 
   return NextResponse.json(formatted);
 }

@@ -101,7 +101,7 @@ export async function getUserActivityData(date?: string): Promise<Result<any>> {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log("Fitbit response:", JSON.stringify(response.data, null, 2));
+    //console.log("Fitbit response:", JSON.stringify(response.data, null, 2));
 
     return {
       success: true,

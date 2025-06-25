@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, Menu, User, LogOut, Activity, Smartphone, Settings } from "lucide-react";
+import { Bell, Menu, User, LogOut, Activity, Smartphone, Settings, Download } from "lucide-react";
+import ExportButton from "@/components/export-button";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
@@ -49,7 +50,7 @@ export default function DashboardHeader() {
         callbackUrl: '/login'
       })
 
-      // Clear any app-specific state here if needed
+      // Clear any app-specific state here if needed (for now, handled by NextAuth)
       
       // Redirect to login page
       router.push('/login')
@@ -81,6 +82,43 @@ export default function DashboardHeader() {
     }
     router.push(`/connect-${app.toLowerCase()}`)
   }
+
+  const handleExport = async () => {
+    try {
+      const response = await fetch('/api/export');
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to export data');
+      }
+
+      // Get the CSV content
+      const csvContent = await response.text();
+
+      // Create a blob and download link
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'training-data.csv';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast({
+        title: "Export successful",
+        description: "Your training data has been downloaded as a CSV file.",
+      });
+    } catch (error) {
+      console.error("Export failed:", error);
+      toast({
+        title: "Export failed",
+        description: error instanceof Error ? error.message : "Failed to export data. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Handle keyboard navigation for the mobile menu
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -134,9 +172,7 @@ export default function DashboardHeader() {
               role="navigation" 
               aria-label="Main navigation"
             >
-              <NavLink href="/">Dashboard</NavLink>
               <NavLink href="/training">Training</NavLink>
-              <NavLink href="/stats">Stats</NavLink>
               <NavLink href="/measurements">Measurements</NavLink>
               <NavLink href="/calendar">Calendar</NavLink>
             </nav>
@@ -152,9 +188,7 @@ export default function DashboardHeader() {
               onKeyDown={handleKeyDown}
             >
               <div className="px-2 pt-2 pb-3 space-y-1">
-                <NavLink href="/">Dashboard</NavLink>
                 <NavLink href="/training">Training</NavLink>
-                <NavLink href="/stats">Stats</NavLink>
                 <NavLink href="/measurements">Measurements</NavLink>
                 <NavLink href="/calendar">Calendar</NavLink>
               </div>
@@ -163,45 +197,18 @@ export default function DashboardHeader() {
             <div className="flex items-center space-x-2">
               {status === 'authenticated' ? (
                 <>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="hidden md:inline-flex gap-2"
-                        aria-label="Connect fitness apps"
-                      >
-                        <Smartphone className="h-4 w-4" aria-hidden="true" />
-                        Connect Apps
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem
-                        onClick={() => handleConnectApp("fitbit")}
-                        className="gap-2"
-                        role="menuitem"
-                      >
-                        <Activity className="h-4 w-4" aria-hidden="true" />
-                        Connect Fitbit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleConnectApp("strava")}
-                        className="gap-2"
-                        role="menuitem"
-                      >
-                        <Activity className="h-4 w-4" aria-hidden="true" />
-                        Connect Strava
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleConnectApp("nike")}
-                        className="gap-2"
-                        role="menuitem"
-                      >
-                        <Activity className="h-4 w-4" aria-hidden="true" />
-                        Connect Nike
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  {/* Connect Fitbit Only */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hidden md:inline-flex gap-2"
+                    aria-label="Connect Fitbit"
+                    onClick={() => handleConnectApp("fitbit")}
+                  >
+                    {/* Fitbit logo */}
+                    <img src="/images/fitbit.png" alt="Fitbit Logo" className="h-4 w-4" />
+                    Connect Fitbit
+                  </Button>
 
                   <ThemeToggle />
 
@@ -229,15 +236,14 @@ export default function DashboardHeader() {
                             Profile
                           </Link>
                         </Button>
-                        <Button variant="ghost" className="w-full justify-start" asChild>
-                          <Link 
-                            href="/settings"
-                            role="menuitem"
-                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                          >
-                            <Settings className="mr-2 h-4 w-4" aria-hidden="true" />
-                            Settings
-                          </Link>
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          onClick={handleExport}
+                          role="menuitem"
+                        >
+                          <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                          Export Data
                         </Button>
                         <Button 
                           variant="ghost" 

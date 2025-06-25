@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,27 +14,21 @@ interface GoalFormProps {
 export default function GoalForm({ onSuccess }: GoalFormProps) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const [userId, setUserId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const { addGoal } = useGoals()
+  const { data: session, status } = useSession()
 
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId")
-    if (!storedUserId) {
-      router.push("/login")
-      return
-    }
-    setUserId(storedUserId)
-  }, [router])
+  // Only render form if authenticated
+  if (status === 'loading') return null
+  if (!session?.user?.id) {
+    return (
+      <div className="text-center text-red-500">You must be logged in to set a goal.</div>
+    )
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
-    if (!userId) {
-      router.push("/login")
-      return
-    }
-
+    setError(null)
     setLoading(true)
     try {
       const form = e.target as HTMLFormElement
@@ -65,10 +60,6 @@ export default function GoalForm({ onSuccess }: GoalFormProps) {
     } finally {
       setLoading(false)
     }
-  }
-
-  if (!userId) {
-    return null // Don't render form if user is not logged in
   }
 
   return (

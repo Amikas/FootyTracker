@@ -12,6 +12,7 @@ CREATE TABLE "FitbitActivity" (
     "lastUpdated" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "manual" BOOLEAN NOT NULL DEFAULT false,
+    "heartRate" INTEGER,
 
     CONSTRAINT "FitbitActivity_pkey" PRIMARY KEY ("id")
 );
@@ -26,6 +27,8 @@ CREATE TABLE "UserProfile" (
     "weightKg" DOUBLE PRECISION,
     "heightCm" DOUBLE PRECISION,
     "avatarUrl" TEXT,
+    "resetToken" TEXT,
+    "resetTokenExpiry" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -106,8 +109,35 @@ CREATE TABLE "Exercise" (
     "name" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "description" TEXT,
+    "createdBy" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Exercise_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Routine" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Routine_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "RoutineExercise" (
+    "id" TEXT NOT NULL,
+    "routineId" TEXT NOT NULL,
+    "exerciseId" TEXT NOT NULL,
+    "order" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "RoutineExercise_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -177,6 +207,9 @@ CREATE INDEX "CalendarEvent_trainingPlanId_idx" ON "CalendarEvent"("trainingPlan
 CREATE INDEX "EventAttachment_eventId_idx" ON "EventAttachment"("eventId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "RoutineExercise_routineId_exerciseId_key" ON "RoutineExercise"("routineId", "exerciseId");
+
+-- CreateIndex
 CREATE INDEX "Reminder_userId_idx" ON "Reminder"("userId");
 
 -- CreateIndex
@@ -187,6 +220,12 @@ ALTER TABLE "CalendarEvent" ADD CONSTRAINT "CalendarEvent_trainingPlanId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "EventAttachment" ADD CONSTRAINT "EventAttachment_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "CalendarEvent"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "RoutineExercise" ADD CONSTRAINT "RoutineExercise_routineId_fkey" FOREIGN KEY ("routineId") REFERENCES "Routine"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "RoutineExercise" ADD CONSTRAINT "RoutineExercise_exerciseId_fkey" FOREIGN KEY ("exerciseId") REFERENCES "Exercise"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TrainingSet" ADD CONSTRAINT "TrainingSet_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "TrainingSession"("id") ON DELETE CASCADE ON UPDATE CASCADE;

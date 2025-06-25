@@ -43,7 +43,8 @@ export default function UpcomingGoals() {
     increment: boolean
   ) => {
     try {
-      const step = target * 0.05 // 5% of target as step
+      // Always increment or decrement by 1 regardless of goal type or target
+      const step = 1
       const newProgress = increment 
         ? Math.min(currentProgress + step, target)
         : Math.max(currentProgress - step, 0)
@@ -51,7 +52,7 @@ export default function UpcomingGoals() {
       await updateGoalProgress(id, Number(newProgress.toFixed(2)), type)
       toast({
         title: "Progress updated",
-        description: `Goal progress ${increment ? 'increased' : 'decreased'} by ${step.toFixed(2)}`,
+        description: `Goal progress ${increment ? 'increased' : 'decreased'} by ${step}`,
       })
     } catch (error) {
       toast({

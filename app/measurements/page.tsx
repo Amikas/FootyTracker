@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,7 +12,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Calculator, Droplets, Flame, Moon, Trophy, Plus, Scale, Edit, Trash2, Clock } from "lucide-react"
+import { Calculator, Droplets, Flame, Moon, Trophy, Plus, Scale, Edit, Trash2, Clock, Home } from "lucide-react"
 
 interface CalorieEntry {
   id: string
@@ -38,14 +40,15 @@ interface SleepEntry {
   notes?: string
 }
 
-interface BestRecord {
+interface RecordEntry {
   id: string
-  category: string
+  userId: string
+  exercise: string
   value: number
   unit: string
   date: string
-  previousBest?: number
-  notes?: string
+  createdAt: string
+  updatedAt: string
 }
 
 export default function MeasurementsPage() {
@@ -71,19 +74,26 @@ export default function MeasurementsPage() {
   const [newSleepQuality, setNewSleepQuality] = useState<"poor" | "fair" | "good" | "excellent">("good")
   const [newSleepNotes, setNewSleepNotes] = useState("")
 
-  // Best Records State
-  const [bestRecords, setBestRecords] = useState<BestRecord[]>([])
-  const [editingRecord, setEditingRecord] = useState<BestRecord | null>(null)
-  const [newRecordCategory, setNewRecordCategory] = useState("")
-  const [newRecordValue, setNewRecordValue] = useState("")
-  const [newRecordUnit, setNewRecordUnit] = useState("")
-  const [newRecordNotes, setNewRecordNotes] = useState("")
+  // Best Records State (now persistent)
+  const { data: session } = useSession()
+  const [records, setRecords] = useState<RecordEntry[]>([])
+  const [recordExercise, setRecordExercise] = useState("")
+  const [recordValue, setRecordValue] = useState("")
+  const [recordUnit, setRecordUnit] = useState("")
+  const [recordLoading, setRecordLoading] = useState(false)
 
   // BMI Calculator State
   const [height, setHeight] = useState("")
   const [weight, setWeight] = useState("")
   const [bmi, setBmi] = useState<number | null>(null)
   const [bmiHistory, setBmiHistory] = useState<Array<{ date: string; bmi: number; weight: number }>>([])
+
+  useEffect(() => {
+    if (!session?.user?.id) return
+    fetch(`/api/records?userId=${session.user.id}`)
+      .then((res) => res.json())
+      .then(setRecords)
+  }, [session?.user?.id])
 
   // Utility Functions
   const getTodayString = () => new Date().toISOString().split("T")[0]
@@ -262,64 +272,28 @@ export default function MeasurementsPage() {
   }
 
   // Best Records Functions
-  const addBestRecord = () => {
-    if (newRecordCategory && newRecordValue && newRecordUnit) {
-      const existingRecord = bestRecords.find((r) => r.category.toLowerCase() === newRecordCategory.toLowerCase())
-      const record: BestRecord = {
-        id: Date.now().toString(),
-        category: newRecordCategory,
-        value: Number.parseFloat(newRecordValue),
-        unit: newRecordUnit,
-        date: getTodayString(),
-        previousBest: existingRecord?.value,
-        notes: newRecordNotes || undefined,
-      }
-
-      if (existingRecord) {
-        setBestRecords(bestRecords.map((r) => (r.id === existingRecord.id ? record : r)))
-      } else {
-        setBestRecords([...bestRecords, record])
-      }
-      resetRecordForm()
+  const addRecord = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!recordExercise || !recordValue || !recordUnit) return
+    setRecordLoading(true)
+    const res = await fetch("/api/records", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: session.user.id,
+        exercise: recordExercise,
+        value: parseFloat(recordValue),
+        unit: recordUnit,
+      }),
+    })
+    if (res.ok) {
+      setRecordExercise("")
+      setRecordValue("")
+      setRecordUnit("")
+      const updated = await fetch(`/api/records?userId=${session.user.id}`).then((r) => r.json())
+      setRecords(updated)
     }
-  }
-
-  const updateBestRecord = () => {
-    if (editingRecord && newRecordCategory && newRecordValue && newRecordUnit) {
-      const updatedRecords = bestRecords.map((record) =>
-        record.id === editingRecord.id
-          ? {
-              ...record,
-              category: newRecordCategory,
-              value: Number.parseFloat(newRecordValue),
-              unit: newRecordUnit,
-              notes: newRecordNotes || undefined,
-            }
-          : record,
-      )
-      setBestRecords(updatedRecords)
-      resetRecordForm()
-      setEditingRecord(null)
-    }
-  }
-
-  const deleteRecord = (id: string) => {
-    setBestRecords(bestRecords.filter((record) => record.id !== id))
-  }
-
-  const editRecord = (record: BestRecord) => {
-    setEditingRecord(record)
-    setNewRecordCategory(record.category)
-    setNewRecordValue(record.value.toString())
-    setNewRecordUnit(record.unit)
-    setNewRecordNotes(record.notes || "")
-  }
-
-  const resetRecordForm = () => {
-    setNewRecordCategory("")
-    setNewRecordValue("")
-    setNewRecordUnit("")
-    setNewRecordNotes("")
+    setRecordLoading(false)
   }
 
   // BMI Calculator Functions
@@ -354,9 +328,20 @@ export default function MeasurementsPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Measurements Dashboard</h1>
-        <p className="text-muted-foreground">Track your health and fitness metrics</p>
+      <div className="flex justify-between items-center mb-4">
+        <div className="text-center space-y-2 flex-1">
+          <h1 className="text-3xl font-bold">Measurements Dashboard</h1>
+          <p className="text-muted-foreground">Track your health and fitness metrics</p>
+        </div>
+        <Link href="/">
+          <Button
+            variant="outline"
+            className="gap-2 bg-background hover:bg-background/90 text-foreground"
+          >
+            <Home className="h-5 w-5" />
+            Return to Home
+          </Button>
+        </Link>
       </div>
 
       <Tabs defaultValue="calories" className="w-full">
@@ -783,10 +768,10 @@ export default function MeasurementsPage() {
                               entry.quality === "excellent"
                                 ? "default"
                                 : entry.quality === "good"
-                                  ? "secondary"
-                                  : entry.quality === "fair"
-                                    ? "outline"
-                                    : "destructive"
+                                ? "secondary"
+                                : entry.quality === "fair"
+                                ? "outline"
+                                : "destructive"
                             }
                           >
                             {entry.quality}
@@ -817,73 +802,35 @@ export default function MeasurementsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>{editingRecord ? "Edit Record" : "Add Personal Best"}</CardTitle>
+                <CardTitle>Add Personal Best</CardTitle>
                 <CardDescription>Track your achievements and milestones</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="record-category">Category</Label>
+                <form className="space-y-4" onSubmit={addRecord}>
                   <Input
-                    id="record-category"
-                    placeholder="e.g., Push-ups, Weight, 5K Run"
-                    value={newRecordCategory}
-                    onChange={(e) => setNewRecordCategory(e.target.value)}
+                    placeholder="Exercise (e.g., Push-ups, 5K Run)"
+                    value={recordExercise}
+                    onChange={(e) => setRecordExercise(e.target.value)}
                   />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="record-value">Value</Label>
+                  <div className="grid grid-cols-2 gap-4">
                     <Input
-                      id="record-value"
+                      placeholder="Value"
                       type="number"
-                      step="0.1"
-                      placeholder="50"
-                      value={newRecordValue}
-                      onChange={(e) => setNewRecordValue(e.target.value)}
+                      value={recordValue}
+                      onChange={(e) => setRecordValue(e.target.value)}
                     />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="record-unit">Unit</Label>
                     <Input
-                      id="record-unit"
-                      placeholder="reps, kg, minutes"
-                      value={newRecordUnit}
-                      onChange={(e) => setNewRecordUnit(e.target.value)}
+                      placeholder="Unit (reps, kg, min)"
+                      value={recordUnit}
+                      onChange={(e) => setRecordUnit(e.target.value)}
                     />
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="record-notes">Notes (optional)</Label>
-                  <Textarea
-                    id="record-notes"
-                    placeholder="Additional details about this achievement..."
-                    value={newRecordNotes}
-                    onChange={(e) => setNewRecordNotes(e.target.value)}
-                  />
-                </div>
-
-                <div className="flex gap-2">
-                  <Button onClick={editingRecord ? updateBestRecord : addBestRecord} className="flex-1">
-                    <Trophy className="h-4 w-4 mr-2" />
-                    {editingRecord ? "Update Record" : "Add Record"}
+                  <Button type="submit" disabled={recordLoading} className="w-full">
+                    Add Record
                   </Button>
-                  {editingRecord && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setEditingRecord(null)
-                        resetRecordForm()
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </div>
+                </form>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle>Records Overview</CardTitle>
@@ -891,13 +838,12 @@ export default function MeasurementsPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-center p-6 bg-muted rounded-lg">
-                  <div className="text-3xl font-bold text-yellow-600">{bestRecords.length}</div>
+                  <div className="text-3xl font-bold text-yellow-600">{records.length}</div>
                   <div className="text-sm text-muted-foreground">Personal Records</div>
                 </div>
               </CardContent>
             </Card>
           </div>
-
           <Card>
             <CardHeader>
               <CardTitle>Your Personal Bests</CardTitle>
@@ -905,35 +851,20 @@ export default function MeasurementsPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {bestRecords.map((record) => (
+                {records.map((record) => (
                   <div key={record.id} className="p-4 border rounded-lg">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex-1">
-                        <h4 className="font-semibold">{record.category}</h4>
+                        <h4 className="font-semibold">{record.exercise}</h4>
                         <div className="text-2xl font-bold text-primary">
                           {record.value} {record.unit}
                         </div>
-                        <div className="text-sm text-muted-foreground">{record.date}</div>
-                        {record.previousBest && (
-                          <div className="text-sm text-green-600">
-                            +{(record.value - record.previousBest).toFixed(1)} improvement
-                          </div>
-                        )}
-                        {record.notes && <div className="text-sm text-muted-foreground mt-2">{record.notes}</div>}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => editRecord(record)}>
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => deleteRecord(record.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <div className="text-sm text-muted-foreground">
+                          {new Date(record.date).toLocaleDateString()}
+                        </div>
                       </div>
                     </div>
-                    <Badge variant="secondary">
-                      <Trophy className="h-3 w-3 mr-1" />
-                      Personal Best
-                    </Badge>
+                    <Badge variant="secondary">Personal Best</Badge>
                   </div>
                 ))}
               </div>

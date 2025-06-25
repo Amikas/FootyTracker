@@ -9,7 +9,7 @@ datasource db {
 
 model FitbitActivity {
   id          String    @id @default(cuid())
-  date        DateTime  @unique
+  date        DateTime
   duration    Int
   calories    Int
   steps       Int
@@ -17,6 +17,7 @@ model FitbitActivity {
   lastUpdated DateTime? @default(now())
   createdAt   DateTime  @default(now())
   manual      Boolean   @default(false)
+  heartRate   Int?
 }
 
 model UserProfile {
@@ -81,27 +82,12 @@ model CalendarEvent {
   reminderBefore Int? // Minutes before event to send reminder
   trainingPlanId String? // Reference to attached training plan
   trainingPlan   TrainingPlan?     @relation(fields: [trainingPlanId], references: [id])
-  attachments    EventAttachment[]
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
   @@index([userId])
   @@index([startDate, endDate])
   @@index([trainingPlanId])
-}
-
-model EventAttachment {
-  id        String        @id @default(cuid())
-  eventId   String
-  event     CalendarEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  name      String
-  type      String // 'document', 'image', 'video', etc.
-  url       String // URL to the stored file
-  size      Int // File size in bytes
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-
-  @@index([eventId])
 }
 
 model Exercise {
@@ -188,6 +174,17 @@ model Reminder {
 
   @@index([userId])
   @@index([date])
+}
+
+model Record {
+  id        String   @id @default(cuid())
+  userId    String  
+  exercise  String
+  value     Float
+  unit      String
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum ReminderCategory {

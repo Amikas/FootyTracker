@@ -67,7 +67,8 @@ export async function syncFitbitData(
   }
 
   try {
-    const existing = await prisma.fitbitActivity.findUnique({
+    // Use findFirst instead of findUnique, since date is not unique
+    const existing = await prisma.fitbitActivity.findFirst({
       where: { date: new Date(formattedDate) },
     })
 
@@ -87,31 +88,37 @@ export async function syncFitbitData(
       totalDuration += existing.duration
     }
 
-    const upserted = await prisma.fitbitActivity.upsert({
-      where: {
-        date: new Date(formattedDate),
-      },
-      update: {
-        steps: totalSteps,
-        distance: totalDistance,
-        calories: totalCalories,
-        duration: totalDuration,
-        lastUpdated: new Date(),
-        manual: existing?.manual || false,
-      },
-      create: {
-        date: new Date(formattedDate),
-        steps: totalSteps,
-        distance: totalDistance,
-        calories: totalCalories,
-        duration: totalDuration,
-        lastUpdated: new Date(),
-        manual: false,
-      },
-    })
-
-    console.log(`Successfully synced Fitbit data for ${formattedDate}`)
-    return { success: true, data: upserted }
+    if (existing) {
+      // Update the existing record
+      const updated = await prisma.fitbitActivity.update({
+        where: { id: existing.id },
+        data: {
+          steps: totalSteps,
+          distance: totalDistance,
+          calories: totalCalories,
+          duration: totalDuration,
+          lastUpdated: new Date(),
+          manual: existing.manual || false,
+        },
+      })
+      console.log(`Successfully updated Fitbit data for ${formattedDate}`)
+      return { success: true, data: updated }
+    } else {
+      // Create a new record
+      const created = await prisma.fitbitActivity.create({
+        data: {
+          date: new Date(formattedDate),
+          steps: totalSteps,
+          distance: totalDistance,
+          calories: totalCalories,
+          duration: totalDuration,
+          lastUpdated: new Date(),
+          manual: false,
+        },
+      })
+      console.log(`Successfully created Fitbit data for ${formattedDate}`)
+      return { success: true, data: created }
+    }
   } catch (error) {
     console.error(`Database error while saving Fitbit data:`, error)
     return { success: false, error: 'Failed to save data to database' }
