@@ -76,24 +76,25 @@ export default function WeatherWidget() {
     <div className="">
       <Card className="shadow-lg border-blue-400">
         <CardHeader className="pb-2">
-          <CardTitle className="text-white text-lg flex items-center gap-2">
+          <CardTitle className="text-lg flex items-center gap-2 text-foreground">
             <span role="img" aria-label="Weather">🌤️</span> Football Weather
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0 flex flex-col gap-2">
           {loading ? (
-            <div className="italic text-white">Loading weather...</div>
+            <div className="italic text-muted-foreground">Loading weather...</div>
           ) : error ? (
-            <div className="italic text-red-400">{error}</div>
+            <div className="italic text-destructive">{error}</div>
           ) : weather ? (
             <>
-              <div className="text-white font-semibold">
+              <div className="font-semibold text-foreground">
                 {weather.temperature}°C and Wind {weather.windspeed} km/h
               </div>
-              <div className="text-white text-sm">
+              <div className="text-sm text-foreground">
                 {weather.precipitation > 0 ? `Rain: ${weather.precipitation} mm` : "No rain"}
               </div>
-              <div className={`mt-2 font-bold ${getAdvice(weather).color}`}>
+              <div className={`mt-2 font-bold ${getAdvice(weather).color} dark:${getAdvice(weather).color.replace("-400", "-300")}`}>
+                {/* Ensures color is visible in both themes */}
                 {getAdvice(weather).text}
               </div>
             </>
@@ -101,7 +102,7 @@ export default function WeatherWidget() {
           <Button
             size="sm"
             variant="outline"
-            className="self-end mt-2 border-blue-400 text-white"
+            className="self-end mt-2 border-blue-400 text-foreground"
             onClick={() => location && setLocation({ ...location })}
           >
             Refresh

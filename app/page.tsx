@@ -162,18 +162,18 @@ export default function Dashboard() {
                   </CardHeader>
                   <CardContent className="pt-0 flex flex-col gap-2">
                     {loadingQuote ? (
-                      <div className="italic text-white">Loading...</div>
+                      <div className="italic text-muted-foreground">Loading...</div>
                     ) : quote ? (
                       <>
-                        <div className="italic text-white">
+                        <div className="italic text-foreground">
                           "{quote.text}"
                         </div>
-                        <div className="text-right text-sm text-yellow-600 font-bold">- {quote.author}</div>
+                        <div className="text-right text-sm text-yellow-700 dark:text-yellow-400 font-bold">- {quote.author}</div>
                       </>
                     ) : (
-                      <div className="italic text-white">No quote available.</div>
+                      <div className="italic text-muted-foreground">No quote available.</div>
                     )}
-                    <Button size="sm" variant="outline" className="self-end mt-2 border-yellow-400 text-white-900" onClick={skipQuote}>
+                    <Button size="sm" variant="outline" className="self-end mt-2 border-yellow-400 text-yellow-900 dark:text-yellow-200" onClick={skipQuote}>
                       Next Quote
                     </Button>
                   </CardContent>
@@ -194,18 +194,18 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent className="pt-0 flex flex-col gap-2">
                   {loadingQuote ? (
-                    <div className="italic text-white">Loading...</div>
+                    <div className="italic text-muted-foreground">Loading...</div>
                   ) : quote ? (
                     <>
-                      <div className="italic text-white">
+                      <div className="italic text-foreground">
                         "{quote.text}"
                       </div>
-                      <div className="text-right text-sm text-yellow-700 font-bold">- {quote.author}</div>
+                      <div className="text-right text-sm text-yellow-700 dark:text-yellow-400 font-bold">- {quote.author}</div>
                     </>
                   ) : (
-                    <div className="italic text-white">No quote available.</div>
+                    <div className="italic text-muted-foreground">No quote available.</div>
                   )}
-                  <Button size="sm" variant="outline" className="self-end mt-2 border-yellow-400 text-yellow-900" onClick={skipQuote}>
+                  <Button size="sm" variant="outline" className="self-end mt-2 border-yellow-400 text-yellow-900 dark:text-yellow-200" onClick={skipQuote}>
                     Next Quote
                   </Button>
                 </CardContent>
